@@ -382,7 +382,7 @@ async function remoteLoad(){
   const d=await api('load');
   state.platos=d.platos||[]; state.menus=d.menus||{}; state.nino=d.nino||{};
   if(d.tags&&d.tags.length)state.tags=d.tags;
-  state.seeded=true;
+  if(state.platos.length)state.seeded=true; // solo si la hoja ya tiene platos
   saveLocal(); setSync('ok','Conectado a Drive');
 }
 function bg(p){ // guardar en drive en segundo plano
@@ -746,9 +746,14 @@ $('#setProbar').addEventListener('click',async()=>{
   catch(e){toast('Falla: '+e.message);setSync('err','Error de conexión')}
 });
 async function seedRemote(){
+  if(!state.platos.length)state.seeded=false;
   seed();
-  for(const p of state.platos){try{await api('savePlato',{plato:p})}catch(e){break}}
+  setSync('busy','Subiendo platos iniciales…');
+  for(const p of state.platos){try{await api('savePlato',{plato:p})}catch(e){setSync('err','Error al subir platos');return}}
+  await api('saveTags',{tags:state.tags}).catch(()=>{});
+  setSync('ok','Conectado a Drive');
   renderAll();
+  toast(state.platos.length+' platos iniciales cargados en tu hoja ✔');
 }
 $('#setExport').addEventListener('click',()=>{
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
@@ -773,7 +778,10 @@ function renderAll(){renderTable();renderLib();renderNino();renderTagPick($('#re
   $('#weekStart').value=isoDate(nextMonday());
   $('#weekStart').addEventListener('change',renderTable);
   if(scriptUrl){
-    try{await remoteLoad();$('#offlineBanner').classList.remove('show')}
+    try{
+      await remoteLoad();$('#offlineBanner').classList.remove('show');
+      if(!state.platos.length)await seedRemote();
+    }
     catch(e){setSync('err','Sin conexión (usando copia local)');$('#offlineBanner').classList.add('show')}
   }else{
     $('#offlineBanner').classList.add('show');setSync('','Sin conectar');
