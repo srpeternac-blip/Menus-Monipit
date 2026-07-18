@@ -24,7 +24,7 @@ input,textarea,select{font-family:var(--body);font-size:15px;color:var(--ink)}
 
 /* ---------- Cabecera ---------- */
 header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
-.head-inner{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.head-inner{max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:baseline;gap:8px}
 .brand small{font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-soft);letter-spacing:.12em;text-transform:uppercase}
 nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
@@ -36,7 +36,7 @@ nav button.active{background:var(--olive);color:#fff}
 @keyframes pulse{50%{opacity:.4}}
 #syncLabel{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;white-space:nowrap}
 
-main{max-width:1080px;margin:0 auto;padding:26px 20px 80px}
+main{max-width:1120px;margin:0 auto;padding:26px 20px 80px}
 .view{display:none}.view.active{display:block;animation:fadeIn .18s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -52,52 +52,68 @@ p.viewsub{color:var(--ink-soft);margin-bottom:20px;font-size:14px}
 .btn.danger{color:var(--pimiento);border-color:#E7C4B8}
 .btn.danger:hover{background:var(--pimiento-tint)}
 .btn.small{padding:5px 11px;font-size:13px;border-radius:8px}
-.btn:focus-visible,nav button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+.btn:focus-visible,nav button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
 
 /* ---------- Barra generar ---------- */
-.genbar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.genbar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
 .turno{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
 .turno button{border:none;background:var(--card);padding:8px 16px;font-size:14px;font-weight:600;color:var(--ink-soft)}
-.turno button.active{background:var(--mostaza-tint);color:var(--ink)}
-.turno button.active.manana{background:var(--mostaza-tint)}
-.turno button.active.tarde{background:var(--olive-tint)}
-.genbar label{font-size:13px;color:var(--ink-soft);font-weight:600}
-.genbar input[type=date]{border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--card)}
+.turno button.active.manana{background:var(--mostaza-tint);color:var(--ink)}
+.turno button.active.tarde{background:var(--olive-tint);color:var(--ink)}
 .genbar .spacer{flex:1}
 
-/* ---------- Hoja del frigo (tabla) ---------- */
+/* ---------- Layout calendario ---------- */
+.calwrap{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start}
+@media(max-width:820px){.calwrap{grid-template-columns:1fr}}
+.months{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px;position:sticky;top:80px}
+.months h4{font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);padding:4px 8px 8px}
+.months button{display:block;width:100%;text-align:left;background:none;border:none;padding:7px 10px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink-soft)}
+.months button:hover{background:var(--olive-tint)}
+.months button.on{background:var(--olive);color:#fff}
+.months .empty{font-size:12.5px;color:var(--ink-soft);padding:4px 8px}
+@media(max-width:820px){.months{position:static;display:flex;gap:4px;overflow-x:auto;padding:8px}.months h4{display:none}.months button{width:auto;white-space:nowrap}.months .empty{white-space:nowrap}}
+
+/* ---------- Hoja ---------- */
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:2px solid var(--ink)}
-.sheet-head h3{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:.02em}
-.sheet-head .dates{font-size:13px;color:var(--ink-soft)}
+.sheet-head{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:2px solid var(--ink)}
+.sheet-head .navarrow{border:1px solid var(--line);background:var(--card);border-radius:8px;width:34px;height:34px;font-size:16px;font-weight:700;color:var(--ink-soft);flex:none}
+.sheet-head .navarrow:hover{background:var(--olive-tint)}
+.sheet-title{flex:1;text-align:center}
+.sheet-title h3{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:.01em}
+.sheet-title .dates{font-size:12.5px;color:var(--ink-soft)}
+.savedmark{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--olive-dark);background:var(--olive-tint);border-radius:5px;padding:2px 7px;vertical-align:middle;margin-left:8px}
+
+.blocklabel{font-family:var(--display);font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);background:#F1EFE6;padding:7px 16px;border-bottom:1px solid var(--line)}
 table.menu{width:100%;border-collapse:collapse;table-layout:fixed}
-table.menu th{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;background:#FBFAF6}
-table.menu th.daycol{width:64px}
+table.menu th{font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;background:#FBFAF6}
+table.menu th.daycol{width:60px}
 table.menu td{border-bottom:1px solid var(--line-soft);vertical-align:top;padding:0}
 table.menu tr:last-child td{border-bottom:none}
-td.day{font-family:var(--display);font-weight:800;font-size:30px;text-align:center;color:var(--olive);padding:14px 0!important;user-select:none}
-td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-soft);letter-spacing:.05em}
-.cell{min-height:74px;padding:12px 14px;position:relative;border-left:1px solid var(--line-soft);transition:background .12s;height:100%}
-.cell:hover{background:var(--olive-tint);cursor:pointer}
+td.day{font-family:var(--display);font-weight:800;font-size:26px;text-align:center;color:var(--olive);padding:12px 0!important;user-select:none}
+td.day.wk{color:var(--mostaza)}
+td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-soft)}
+.cell{min-height:56px;padding:11px 30px 11px 13px;position:relative;border-left:1px solid var(--line-soft);transition:background .12s;cursor:pointer}
+.cell:hover{background:var(--olive-tint)}
 .cell .nm{font-weight:600;font-size:14.5px;line-height:1.3}
-.cell .ing{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.35}
-.cell .tags{margin-top:6px;display:flex;gap:4px;flex-wrap:wrap}
 .cell.empty .nm{color:#B9B4A3;font-weight:500;font-style:italic}
-.cell.premio::after{content:"PREMIO";position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--pimiento);border:1px solid var(--pimiento);border-radius:4px;padding:1px 5px;background:var(--pimiento-tint)}
+.cell.premio::after{content:"PREMIO";position:absolute;bottom:7px;right:8px;font-size:8.5px;font-weight:700;letter-spacing:.12em;color:var(--pimiento);border:1px solid var(--pimiento);border-radius:4px;padding:1px 4px;background:var(--pimiento-tint)}
 .cell.nino-warn{box-shadow:inset 3px 0 0 var(--pimiento)}
+.cellmenu{position:absolute;top:6px;right:6px;width:22px;height:22px;border:none;background:transparent;border-radius:6px;color:var(--ink-soft);font-weight:700;font-size:15px;line-height:1;opacity:.35}
+.cell:hover .cellmenu{opacity:1}
+.cellmenu:hover{background:#fff}
+
+.sheet-foot{display:flex;gap:10px;align-items:center;padding:13px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.balance{display:flex;gap:8px;flex-wrap:wrap;margin-right:auto}
+.pill{font-size:12px;font-weight:600;border-radius:999px;padding:4px 11px;border:1px solid var(--line);color:var(--ink-soft);background:#FBFAF6}
+.pill.ok{border-color:#C6D2A8;background:var(--olive-tint);color:var(--olive-dark)}
+.pill.bad{border-color:#E7C4B8;background:var(--pimiento-tint);color:var(--pimiento)}
 .tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--olive-tint);color:var(--olive-dark);border-radius:4px;padding:1px 6px}
 .tag.azul{background:#E3EDF2;color:#33586B}
 .tag.legumbre{background:var(--mostaza-tint);color:#8A6415}
 .tag.bocata{background:var(--pimiento-tint);color:var(--pimiento)}
 
-.sheet-foot{display:flex;gap:10px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
-.balance{display:flex;gap:8px;flex-wrap:wrap;margin-right:auto}
-.pill{font-size:12px;font-weight:600;border-radius:999px;padding:4px 11px;border:1px solid var(--line);color:var(--ink-soft);background:#FBFAF6}
-.pill.ok{border-color:#C6D2A8;background:var(--olive-tint);color:var(--olive-dark)}
-.pill.bad{border-color:#E7C4B8;background:var(--pimiento-tint);color:var(--pimiento)}
-
-/* ---------- Popover celda ---------- */
-#pop{position:absolute;z-index:100;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px rgba(35,38,25,.18);display:none;min-width:170px;overflow:hidden}
+/* ---------- Popover ---------- */
+#pop{position:absolute;z-index:100;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px rgba(35,38,25,.18);display:none;min-width:180px;overflow:hidden}
 #pop button{display:block;width:100%;text-align:left;background:none;border:none;padding:10px 14px;font-size:14px;font-weight:500}
 #pop button:hover{background:var(--olive-tint)}
 #pop button.danger{color:var(--pimiento)}
@@ -117,6 +133,8 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .tagpick{display:flex;gap:6px;flex-wrap:wrap}
 .tagpick .tp{border:1px solid var(--line);background:#FBFAF6;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;color:var(--ink-soft)}
 .tagpick .tp.on{background:var(--olive);border-color:var(--olive);color:#fff}
+.newtag{display:flex;gap:8px;margin-top:10px}
+.newtag input{flex:1;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:#FBFAF6}
 .picklist{max-height:340px;overflow-y:auto;border:1px solid var(--line);border-radius:9px;margin-top:10px}
 .pickitem{padding:10px 14px;border-bottom:1px solid var(--line-soft);cursor:pointer}
 .pickitem:last-child{border-bottom:none}
@@ -124,6 +142,11 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .pickitem .nm{font-weight:600;font-size:14px}
 .pickitem .ing{font-size:12px;color:var(--ink-soft)}
 .pickempty{padding:18px;text-align:center;color:var(--ink-soft);font-size:14px}
+.detail-ing{font-size:14px;color:var(--ink);background:#FBFAF6;border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.detail-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.sugbox{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.sugbox button{border:1px solid var(--line);background:var(--mostaza-tint);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;color:var(--ink)}
+.sugbox button:hover{background:var(--mostaza)}
 
 /* ---------- Registrar ---------- */
 .formcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;max-width:640px}
@@ -131,22 +154,26 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .formcard label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:5px}
 .formcard input[type=text],.formcard textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#FBFAF6}
 .formcard textarea{min-height:70px;resize:vertical}
-.newtag{display:flex;gap:8px;margin-top:10px}
-.newtag input{flex:1;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:#FBFAF6}
 
 /* ---------- Biblioteca ---------- */
-.libbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.libbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
 .libbar input[type=search]{border:1px solid var(--line);border-radius:999px;padding:9px 16px;background:var(--card);min-width:220px}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
 .filters .tp{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer}
 .filters .tp.on{background:var(--olive);border-color:var(--olive);color:#fff}
-.libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.dish{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .1s}
-.dish:hover{transform:translateY(-2px)}
-.dish .nm{font-weight:700;font-size:15px;line-height:1.3}
-.dish .ing{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
-.dish .tags{margin-top:8px;display:flex;gap:4px;flex-wrap:wrap}
-.count{font-size:13px;color:var(--ink-soft);margin-bottom:14px}
+.count{font-size:13px;color:var(--ink-soft);margin-bottom:12px}
+.liblist{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.librow{border-bottom:1px solid var(--line-soft)}
+.librow:last-child{border-bottom:none}
+.librow-head{padding:11px 16px;cursor:pointer;display:flex;align-items:center;gap:10px}
+.librow-head:hover{background:var(--olive-tint)}
+.librow-head .nm{font-weight:600;font-size:14.5px;flex:1}
+.librow-head .tags{display:flex;gap:4px;flex-wrap:wrap}
+.librow-head .chev{color:var(--ink-soft);font-size:12px;transition:transform .15s}
+.librow.open .librow-head .chev{transform:rotate(90deg)}
+.librow-body{display:none;padding:0 16px 13px;font-size:13.5px;color:var(--ink-soft)}
+.librow.open .librow-body{display:block}
+.librow-body .ing{background:#FBFAF6;border:1px solid var(--line-soft);border-radius:8px;padding:8px 11px;margin-bottom:9px}
 
 /* ---------- Menú niño ---------- */
 .ninowrap{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -169,11 +196,11 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 #toast.show{opacity:1}
 
 @media(max-width:720px){
-  td.day{font-size:20px}
-  .cell{padding:9px 8px;min-height:60px}
-  .cell .ing{display:none}
-  table.menu th{font-size:11px;padding:8px 8px}
-  table.menu th.daycol{width:44px}
+  td.day{font-size:19px}
+  .cell{padding:9px 26px 9px 9px;min-height:48px}
+  .cell .nm{font-size:13px}
+  table.menu th{font-size:10.5px;padding:8px 8px}
+  table.menu th.daycol{width:42px}
 }
 </style>
 </head>
@@ -198,30 +225,36 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 
 <!-- ================= MENÚ SEMANAL ================= -->
 <section class="view active" id="view-menu">
-  <h2 class="viewtitle">Menú semanal</h2>
-  <p class="viewsub">Genera la semana, toca cualquier casilla para cambiarla o modificarla, y guarda cuando esté a tu gusto.</p>
-
   <div class="genbar">
     <button class="btn primary" id="btnGenerar">⚡ Generar menú</button>
     <div class="turno">
       <button id="tMan" class="active manana">Mañana</button>
       <button id="tTar" class="tarde">Tarde</button>
     </div>
-    <label>Semana del <input type="date" id="weekStart"></label>
     <div class="spacer"></div>
     <button class="btn" id="btnCopiar">📋 Copiar para Claude</button>
+    <button class="btn small" id="btnVaciar">Vaciar</button>
     <button class="btn primary" id="btnGuardarSemana">💾 Guardar semana</button>
   </div>
 
-  <div class="sheet">
-    <div class="sheet-head">
-      <h3 id="sheetTitle">Semana</h3>
-      <span class="dates" id="sheetDates"></span>
-    </div>
-    <table class="menu" id="menuTable"></table>
-    <div class="sheet-foot">
-      <div class="balance" id="balance"></div>
-      <button class="btn small" id="btnVaciar">Vaciar tabla</button>
+  <div class="calwrap">
+    <aside class="months" id="monthsBox"></aside>
+    <div class="sheet">
+      <div class="sheet-head">
+        <button class="navarrow" id="prevWeek" title="Semana anterior">←</button>
+        <div class="sheet-title">
+          <h3 id="sheetTitle">—</h3>
+          <span class="dates" id="sheetDates"></span>
+        </div>
+        <button class="navarrow" id="nextWeek" title="Semana siguiente">→</button>
+      </div>
+      <div class="blocklabel">Fin de semana</div>
+      <table class="menu" id="tableWeekend"></table>
+      <div class="blocklabel">Diario</div>
+      <table class="menu" id="tableWeekdays"></table>
+      <div class="sheet-foot">
+        <div class="balance" id="balance"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -232,7 +265,8 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
   <p class="viewsub">Da de alta un plato nuevo en tu biblioteca.</p>
   <div class="formcard">
     <div class="row"><label>Nombre del plato</label><input type="text" id="regNombre" placeholder="Lentejas con judías verdes"></div>
-    <div class="row"><label>Ingredientes (separados por comas)</label><textarea id="regIng" placeholder="lentejas, judías verdes, sardinas, ajo, jengibre, limón, aove"></textarea></div>
+    <div class="row"><label>Ingredientes (separados por comas)</label><textarea id="regIng" placeholder="lentejas, judías verdes, sardinas, ajo, jengibre, limón, aove"></textarea>
+      <div class="sugbox" id="regSug"></div></div>
     <div class="row"><label>Etiquetas</label>
       <div class="tagpick" id="regTags"></div>
       <div class="newtag"><input type="text" id="regNewTag" placeholder="Nueva etiqueta…"><button class="btn small" id="regAddTag">Añadir</button></div>
@@ -244,13 +278,13 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 <!-- ================= BIBLIOTECA ================= -->
 <section class="view" id="view-biblioteca">
   <h2 class="viewtitle">Biblioteca</h2>
-  <p class="viewsub">Todos tus platos. Toca uno para editarlo o borrarlo.</p>
+  <p class="viewsub">Todos tus platos. Toca uno para ver sus ingredientes; desde ahí puedes editarlo.</p>
   <div class="libbar">
     <input type="search" id="libSearch" placeholder="Buscar plato o ingrediente…">
     <div class="filters" id="libFilters"></div>
   </div>
   <div class="count" id="libCount"></div>
-  <div class="libgrid" id="libGrid"></div>
+  <div class="liblist" id="libList"></div>
 </section>
 
 <!-- ================= MENÚ NIÑO ================= -->
@@ -276,7 +310,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
   <p class="viewsub">Conexión con tu hoja de Drive y copias de seguridad.</p>
   <div class="setcard">
     <h3>Conexión con Google Drive</h3>
-    <p>Pega la URL de tu Apps Script (acaba en <b>/exec</b>). La app leerá y guardará todo en tu hoja de cálculo.</p>
+    <p>Pega la URL de tu Apps Script (acaba en <b>/exec</b>).</p>
     <input type="text" id="setUrl" placeholder="https://script.google.com/macros/s/…/exec">
     <div style="display:flex;gap:10px">
       <button class="btn primary" id="setGuardarUrl">Guardar y conectar</button>
@@ -297,11 +331,24 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 
 <div id="pop"></div>
 
+<!-- Modal: detalle de plato en casilla -->
+<div class="overlay" id="ovDetail">
+  <div class="modal">
+    <h3 id="detTitle">Plato</h3>
+    <div class="detail-ing" id="detIng"></div>
+    <div class="detail-tags" id="detTags"></div>
+    <div class="foot">
+      <button class="btn" id="detAcciones">Acciones ▾</button>
+      <button class="btn primary" id="detCerrar">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: elegir de biblioteca -->
 <div class="overlay" id="ovPick">
   <div class="modal">
     <h3 id="pickTitle">Elegir plato</h3>
-    <input type="search" id="pickSearch" placeholder="Buscar…">
+    <input type="search" id="pickSearch" placeholder="Buscar por nombre o ingrediente…">
     <div class="picklist" id="pickList"></div>
     <div class="foot"><button class="btn" id="pickCerrar">Cancelar</button></div>
   </div>
@@ -320,12 +367,31 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
   </div>
 </div>
 
+<!-- Modal: añadir plato nuevo desde casilla -->
+<div class="overlay" id="ovNew">
+  <div class="modal">
+    <h3>Añadir plato nuevo</h3>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">Se guarda en la biblioteca y se coloca en la casilla.</p>
+    <div class="row"><label>Nombre</label><input type="text" id="newNombre"></div>
+    <div class="row"><label>Ingredientes (separados por comas)</label><textarea id="newIng"></textarea>
+      <div class="sugbox" id="newSug"></div></div>
+    <div class="row"><label>Etiquetas</label><div class="tagpick" id="newTags"></div>
+      <div class="newtag"><input type="text" id="newNewTag" placeholder="Nueva etiqueta…"><button class="btn small" id="newAddTag">Añadir</button></div>
+    </div>
+    <div class="foot">
+      <button class="btn" id="newCancelar">Cancelar</button>
+      <button class="btn primary" id="newGuardar">Guardar y colocar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: editar plato biblioteca -->
 <div class="overlay" id="ovEdit">
   <div class="modal">
     <h3>Editar plato</h3>
     <div class="row"><label>Nombre</label><input type="text" id="edNombre"></div>
-    <div class="row"><label>Ingredientes</label><textarea id="edIng"></textarea></div>
+    <div class="row"><label>Ingredientes</label><textarea id="edIng"></textarea>
+      <div class="sugbox" id="edSug"></div></div>
     <div class="row"><label>Etiquetas</label><div class="tagpick" id="edTags"></div>
       <div class="newtag"><input type="text" id="edNewTag" placeholder="Nueva etiqueta…"><button class="btn small" id="edAddTag">Añadir</button></div>
     </div>
@@ -342,16 +408,16 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 
 <script>
 /* =====================================================
-   MENÚ PITI — planificador semanal
-   Datos: Google Sheet vía Apps Script (Ajustes) o localStorage
+   MENÚ PITI v2 — calendario, finde, biblioteca en líneas
 ===================================================== */
 const LS_KEY='menuPitiData', LS_URL='menuPitiScriptUrl';
-const DIAS=['Lunes','Martes','Miércoles','Jueves','Viernes'];
-const DIA_L=['L','M','X','J','V'];
-const DEFAULT_TAGS=['comida','cena','sandwich','bocata','legumbre','azul','proteina','ligera','verdura','domingo'];
+const DIAS=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const DIA_L=['L','M','X','J','V','S','D'];
+const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DEFAULT_TAGS=['comida','cena','sandwich','bocata','legumbre','azul','proteina','ligera','verdura','domingo','finde'];
 
 let state={platos:[],menus:{},nino:{},tags:[...DEFAULT_TAGS],seeded:false};
-let week={turno:'manana',start:null,days:{}}; // days[i]={comida:{},sandwich:{},cena:{}}
+let week={turno:'manana',start:null,days:{}};
 let scriptUrl=localStorage.getItem(LS_URL)||'';
 let currentCell=null, editingId=null, dirty=false;
 
@@ -362,9 +428,34 @@ const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function fmtDate(d){return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'})}
 function isoDate(d){return d.toISOString().slice(0,10)}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 function nextMonday(){const d=new Date();const day=d.getDay();const diff=(8-day)%7||7;d.setDate(d.getDate()+diff);d.setHours(12,0,0,0);return d}
-function weekDates(){const out=[];const base=new Date($('#weekStart').value+'T12:00:00');for(let i=0;i<5;i++){const d=new Date(base);d.setDate(base.getDate()+i);out.push(d)}return out}
+function mondayOf(dateStr){const d=new Date(dateStr+'T12:00:00');const wd=(d.getDay()+6)%7;d.setDate(d.getDate()-wd);return d}
+function weekDates(){const out=[];const base=new Date(week.start+'T12:00:00');for(let i=0;i<7;i++){const d=new Date(base);d.setDate(base.getDate()+i);out.push(d)}return out}
 function setSync(st,txt){const d=$('#syncDot');d.className='';if(st)d.classList.add(st);$('#syncText').textContent=txt}
+
+/* mes al que pertenece la semana: el que tenga más días de L a D */
+function weekMonth(startStr){
+  const counts={};
+  const base=new Date(startStr+'T12:00:00');
+  for(let i=0;i<7;i++){const d=new Date(base);d.setDate(base.getDate()+i);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');counts[k]=(counts[k]||0)+1}
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0]; // 'YYYY-MM'
+}
+/* nº de semana dentro de su mes asignado */
+function weekNumberInMonth(startStr){
+  const mk=weekMonth(startStr);
+  const [y,m]=mk.split('-').map(Number);
+  // primer lunes cuya semana pertenece a este mes: retrocede desde día 1
+  let d=mondayOf(y+'-'+String(m).padStart(2,'0')+'-01');
+  let n=0;
+  for(let i=0;i<6;i++){
+    const s=isoDate(d);
+    if(weekMonth(s)===mk){n++;if(s===startStr)return n}
+    if(s===startStr)return Math.max(n,1);
+    d=new Date(d);d.setDate(d.getDate()+7);
+  }
+  return n||1;
+}
 
 /* ---------- persistencia ---------- */
 function saveLocal(){localStorage.setItem(LS_KEY,JSON.stringify(state))}
@@ -381,17 +472,17 @@ async function remoteLoad(){
   setSync('busy','Cargando…');
   const d=await api('load');
   state.platos=d.platos||[]; state.menus=d.menus||{}; state.nino=d.nino||{};
-  if(d.tags&&d.tags.length)state.tags=d.tags;
-  if(state.platos.length)state.seeded=true; // solo si la hoja ya tiene platos
+  if(d.tags&&d.tags.length)state.tags=Array.from(new Set([...d.tags,...DEFAULT_TAGS.filter(t=>['finde','domingo'].includes(t))]));
+  if(state.platos.length)state.seeded=true;
   saveLocal(); setSync('ok','Conectado a Drive');
 }
-function bg(p){ // guardar en drive en segundo plano
+function bg(p){
   if(!scriptUrl)return;
   setSync('busy','Guardando…');
   p.then(()=>setSync('ok','Guardado en Drive')).catch(e=>{setSync('err','Error al guardar');toast('⚠ No se pudo guardar en Drive: '+e.message)});
 }
 
-/* ---------- datos precargados (primera vez) ---------- */
+/* ---------- datos precargados ---------- */
 function seed(){
   if(state.seeded||state.platos.length)return;
   const S=(n,i,t)=>({id:uid(),nombre:n,ingredientes:i,etiquetas:t});
@@ -402,7 +493,7 @@ function seed(){
     S('Tortilla de calabacín y cebolla','huevos, calabacín, cebolla, aove',['cena','proteina','verdura','ligera']),
     S('Salmón salteado con verduras','salmón, calabacín, pimiento, aove',['cena','azul','proteina','verdura']),
     S('Pollo salteado con verduras','pollo, calabacín, pimiento, cebolla, aove',['comida','cena','proteina','verdura']),
-    S('Ensalada R y P con atún y huevo','tomate, cebolla morada, aceitunas, atún en lata, huevo cocido',['comida','cena','azul','proteina','ligera','verdura','domingo']),
+    S('Ensalada R y P con atún y huevo','tomate, cebolla morada, aceitunas, atún en lata, huevo cocido',['comida','cena','azul','proteina','ligera','verdura','domingo','finde']),
     S('Sándwich de atún y aguacate','pan integral, atún en lata, aguacate',['sandwich','azul','proteina']),
     S('Sándwich de caballa y rúcula','pan integral, caballa en lata, rúcula',['sandwich','azul','proteina']),
     S('Sándwich de sardinas y pimiento rojo','pan integral, sardinas en lata, pimiento rojo',['sandwich','azul','proteina']),
@@ -416,7 +507,7 @@ function seed(){
   state.seeded=true; saveLocal();
 }
 
-/* ---------- navegación ---------- */
+/* ---------- navegación vistas ---------- */
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
@@ -428,23 +519,60 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
 }));
 
 /* ---------- turno ---------- */
-$('#tMan').addEventListener('click',()=>setTurno('manana'));
-$('#tTar').addEventListener('click',()=>setTurno('tarde'));
-function setTurno(t){week.turno=t;$('#tMan').classList.toggle('active',t==='manana');$('#tTar').classList.toggle('active',t==='tarde');renderTable()}
+$('#tMan').addEventListener('click',()=>{week.turno='manana';dirty=true;syncTurnoUI();renderTables()});
+$('#tTar').addEventListener('click',()=>{week.turno='tarde';dirty=true;syncTurnoUI();renderTables()});
+function syncTurnoUI(){$('#tMan').classList.toggle('active',week.turno==='manana');$('#tTar').classList.toggle('active',week.turno==='tarde')}
+
+/* ---------- semana actual: cargar / navegar ---------- */
+function loadWeek(startStr){
+  week.start=startStr;
+  const saved=state.menus[startStr];
+  if(saved){week.turno=saved.turno||week.turno;week.days=JSON.parse(JSON.stringify(saved.days||{}));}
+  else week.days={};
+  dirty=false;
+  syncTurnoUI();renderTables();renderMonths();
+}
+function shiftWeek(delta){
+  if(dirty&&!confirm('Tienes cambios sin guardar en esta semana. ¿Salir sin guardar?'))return;
+  const d=new Date(week.start+'T12:00:00');d.setDate(d.getDate()+delta*7);
+  loadWeek(isoDate(d));
+}
+$('#prevWeek').addEventListener('click',()=>shiftWeek(-1));
+$('#nextWeek').addEventListener('click',()=>shiftWeek(1));
+
+/* ---------- columna de meses ---------- */
+function renderMonths(){
+  const box=$('#monthsBox');
+  const byMonth={};
+  Object.keys(state.menus).forEach(wid=>{const mk=weekMonth(wid);if(!byMonth[mk])byMonth[mk]=[];byMonth[mk].push(wid)});
+  const keys=Object.keys(byMonth).sort().reverse();
+  const curMk=weekMonth(week.start);
+  let html='<h4>Historial</h4>';
+  if(!keys.length)html+='<div class="empty">Aún no hay semanas guardadas.</div>';
+  keys.forEach(mk=>{
+    const [y,m]=mk.split('-').map(Number);
+    html+='<button class="'+(mk===curMk?'on':'')+'" data-mk="'+mk+'">'+MESES[m-1]+' '+y+'</button>';
+  });
+  box.innerHTML=html;
+  box.querySelectorAll('button[data-mk]').forEach(b=>b.addEventListener('click',()=>{
+    if(dirty&&!confirm('Tienes cambios sin guardar. ¿Salir sin guardar?'))return;
+    const wids=byMonth[b.dataset.mk].sort();
+    loadWeek(wids[0]);
+  }));
+}
 
 /* ---------- generador ---------- */
-function slotsForTurno(){return week.turno==='manana'?['comida','sandwich','cena']:['comida','cena']}
-function slotLabel(s){return s==='comida'?'Comida':s==='sandwich'?'Sándwich':'Cena'}
-function poolFor(slot){
-  const tag=slot==='sandwich'?'sandwich':slot;
-  return state.platos.filter(p=>p.etiquetas.includes(tag));
+function slotsFor(dayIdx){
+  if(dayIdx>=5)return ['comida','cena']; // finde
+  return week.turno==='manana'?['comida','sandwich','cena']:['comida','cena'];
 }
+function slotLabel(s){return s==='comida'?'Comida':s==='sandwich'?'Sándwich':'Cena'}
 function lastWeekNames(){
-  const keys=Object.keys(state.menus).sort();
-  if(!keys.length)return new Set();
-  const lw=state.menus[keys[keys.length-1]];
+  const prev=new Date(week.start+'T12:00:00');prev.setDate(prev.getDate()-7);
+  const lw=state.menus[isoDate(prev)];
   const s=new Set();
-  DIAS.forEach((_,i)=>{const d=(lw.days||{})[i]||{};Object.values(d).forEach(c=>{if(c&&c.nombre)s.add(norm(c.nombre))})});
+  if(!lw)return s;
+  for(let i=0;i<7;i++){const d=(lw.days||{})[i]||{};Object.values(d).forEach(c=>{if(c&&c.nombre)s.add(norm(c.nombre))})}
   return s;
 }
 const STOP=new Set(['con','de','del','la','el','los','las','y','en','al','a','un','una','salsa','guarnicion']);
@@ -464,68 +592,81 @@ function pick(pool,usedWeek,avoidLast,kidText,checkNino){
 }
 function generar(){
   if(!state.platos.length){toast('La biblioteca está vacía. Registra platos primero.');return}
-  const dates=weekDates(), avoidLast=lastWeekNames(), used=new Set(), slots=slotsForTurno();
+  const dates=weekDates(), avoidLast=lastWeekNames(), used=new Set();
   week.days={};
-  DIAS.forEach((_,i)=>{
+  for(let i=0;i<7;i++){
     week.days[i]={};
     const kid=state.nino[isoDate(dates[i])]||'';
-    slots.forEach(slot=>{
-      let pool=poolFor(slot);
-      if(slot==='cena'&&i===4){ // viernes premio
-        const boc=state.platos.filter(p=>p.etiquetas.includes('bocata'));
-        if(boc.length)pool=boc;
+    slotsFor(i).forEach(slot=>{
+      let pool;
+      if(i>=5){ // finde: solo platos etiquetados finde/domingo
+        pool=state.platos.filter(p=>p.etiquetas.includes('finde')||p.etiquetas.includes('domingo'));
+        const bySlot=pool.filter(p=>p.etiquetas.includes(slot));
+        if(bySlot.length)pool=bySlot;
+      }else if(slot==='cena'&&i===4){ // viernes premio
+        pool=state.platos.filter(p=>p.etiquetas.includes('bocata'));
+        if(!pool.length)pool=state.platos.filter(p=>p.etiquetas.includes('cena'));
+      }else{
+        pool=state.platos.filter(p=>p.etiquetas.includes(slot==='sandwich'?'sandwich':slot));
       }
-      const chosen=pick(pool,used,avoidLast,kid,slot==='cena');
+      const chosen=pick(pool,used,avoidLast,kid,slot==='cena'&&i<5);
       if(chosen){week.days[i][slot]={id:chosen.id,nombre:chosen.nombre,ingredientes:chosen.ingredientes,etiquetas:chosen.etiquetas};used.add(norm(chosen.nombre))}
       else week.days[i][slot]=null;
     });
-  });
-  // reforzar mínimos: azul>=2, legumbre>=2
+  }
+  // mínimos L-V: azul>=2, legumbre>=2
   ['azul','legumbre'].forEach(tag=>{
     let count=countTag(tag);
     if(count>=2)return;
     const candidates=state.platos.filter(p=>p.etiquetas.includes(tag));
     outer:
     for(let i=0;i<5&&count<2;i++){
-      for(const slot of slots){
+      for(const slot of slotsFor(i)){
         if(slot==='cena'&&i===4)continue;
         const cur=week.days[i][slot];
         if(cur&&cur.etiquetas&&cur.etiquetas.includes(tag))continue;
         const kid=state.nino[isoDate(dates[i])]||'';
         const pool=candidates.filter(p=>p.etiquetas.includes(slot==='sandwich'?'sandwich':slot));
-        const usedNow=new Set();DIAS.forEach((_,j)=>slots.forEach(s=>{const c=week.days[j][s];if(c)usedNow.add(norm(c.nombre))}));
+        const usedNow=new Set();for(let j=0;j<7;j++){Object.values(week.days[j]||{}).forEach(c=>{if(c)usedNow.add(norm(c.nombre))})}
         const ch=pick(pool,usedNow,avoidLast,kid,slot==='cena');
         if(ch){week.days[i][slot]={id:ch.id,nombre:ch.nombre,ingredientes:ch.ingredientes,etiquetas:ch.etiquetas};count++;if(count>=2)break outer}
       }
     }
   });
-  dirty=true; renderTable(); toast('Menú generado. Toca las casillas para ajustarlo.');
+  dirty=true; renderTables(); toast('Menú generado. Toca las casillas para ajustarlo.');
 }
-function countTag(tag){
-  let n=0;DIAS.forEach((_,i)=>{const d=week.days[i]||{};Object.values(d).forEach(c=>{if(c&&c.etiquetas&&c.etiquetas.includes(tag))n++})});return n;
+function countTag(tag){ // solo L-V
+  let n=0;for(let i=0;i<5;i++){const d=week.days[i]||{};Object.values(d).forEach(c=>{if(c&&c.etiquetas&&c.etiquetas.includes(tag))n++})}return n;
 }
 $('#btnGenerar').addEventListener('click',generar);
-$('#btnVaciar').addEventListener('click',()=>{week.days={};dirty=true;renderTable()});
+$('#btnVaciar').addEventListener('click',()=>{week.days={};dirty=true;renderTables()});
 
-/* ---------- tabla ---------- */
-function renderTable(){
-  const dates=weekDates(), slots=slotsForTurno(), tbl=$('#menuTable');
-  $('#sheetTitle').textContent='Semana de '+(week.turno==='manana'?'MAÑANA':'TARDE');
-  $('#sheetDates').textContent=fmtDate(dates[0])+' – '+fmtDate(dates[4]);
+/* ---------- tablas ---------- */
+function renderTables(){
+  const dates=weekDates();
+  const mk=weekMonth(week.start);const [y,m]=mk.split('-').map(Number);
+  const saved=!!state.menus[week.start];
+  $('#sheetTitle').innerHTML=MESES[m-1].toUpperCase()+' · Semana '+weekNumberInMonth(week.start)+
+    ' · '+(week.turno==='manana'?'Mañana':'Tarde')+(saved&&!dirty?'<span class="savedmark">GUARDADA</span>':'');
+  $('#sheetDates').textContent=fmtDate(dates[0])+' – '+fmtDate(dates[6])+' '+y;
+  renderBlock($('#tableWeekend'),[5,6],dates,['comida','cena']);
+  const wkSlots=week.turno==='manana'?['comida','sandwich','cena']:['comida','cena'];
+  renderBlock($('#tableWeekdays'),[0,1,2,3,4],dates,wkSlots);
+  renderBalance();
+}
+function renderBlock(tbl,dayIdxs,dates,slots){
   let html='<thead><tr><th class="daycol"></th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+'</tr></thead><tbody>';
-  DIAS.forEach((dia,i)=>{
+  dayIdxs.forEach(i=>{
     const kid=state.nino[isoDate(dates[i])]||'';
-    html+='<tr><td class="day">'+DIA_L[i]+'<small>'+fmtDate(dates[i])+'</small></td>';
+    html+='<tr><td class="day'+(i>=5?' wk':'')+'">'+DIA_L[i]+'<small>'+fmtDate(dates[i])+'</small></td>';
     slots.forEach(slot=>{
       const c=(week.days[i]||{})[slot];
       const premio=(slot==='cena'&&i===4)?' premio':'';
-      const warn=(slot==='cena'&&c&&overlapsNino(c,kid))?' nino-warn':'';
+      const warn=(slot==='cena'&&i<5&&c&&overlapsNino(c,kid))?' nino-warn':'';
       if(c){
-        html+='<td><div class="cell'+premio+warn+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">'+esc(c.nombre)+'</div>'+
-          (c.ingredientes?'<div class="ing">'+esc(c.ingredientes)+'</div>':'')+
-          (c.etiquetas?'<div class="tags">'+c.etiquetas.map(t=>'<span class="tag '+t+'">'+esc(t)+'</span>').join('')+'</div>':'')+'</div></td>';
+        html+='<td><div class="cell'+premio+warn+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">'+esc(c.nombre)+'</div><button class="cellmenu" data-d="'+i+'" data-s="'+slot+'" title="Acciones">⋮</button></div></td>';
       }else{
-        html+='<td><div class="cell empty'+premio+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">— toca para elegir —</div></div></td>';
+        html+='<td><div class="cell empty'+premio+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">—</div></div></td>';
       }
     });
     html+='</tr>';
@@ -533,37 +674,61 @@ function renderTable(){
   html+='</tbody>';
   tbl.innerHTML=html;
   tbl.querySelectorAll('.cell').forEach(c=>{
-    c.addEventListener('click',e=>openPop(c,e));
-    c.addEventListener('keydown',e=>{if(e.key==='Enter')openPop(c,e)});
+    c.addEventListener('click',e=>{
+      if(e.target.classList.contains('cellmenu'))return;
+      const d=+c.dataset.d,s=c.dataset.s;
+      const cont=(week.days[d]||{})[s];
+      currentCell={d,s};
+      if(cont)openDetail(cont);else openPop(c,e);
+    });
+    c.addEventListener('keydown',e=>{if(e.key==='Enter')c.click()});
   });
-  renderBalance();
+  tbl.querySelectorAll('.cellmenu').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    currentCell={d:+b.dataset.d,s:b.dataset.s};
+    openPop(b.closest('.cell'),e);
+  }));
 }
-function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 function renderBalance(){
   const az=countTag('azul'),le=countTag('legumbre'),ve=countTag('verdura');
   $('#balance').innerHTML=
     '<span class="pill '+(az>=2?'ok':'bad')+'">Azul '+az+'/2</span>'+
     '<span class="pill '+(le>=2?'ok':'bad')+'">Legumbre '+le+'/2</span>'+
-    '<span class="pill">Verdura '+ve+'</span>';
+    '<span class="pill">Verdura '+ve+'</span><span class="pill" style="border:none;background:none">mínimos L-V</span>';
 }
 
-/* ---------- popover celda ---------- */
+/* ---------- detalle de plato ---------- */
+function openDetail(c){
+  $('#detTitle').textContent=c.nombre;
+  $('#detIng').textContent=c.ingredientes||'(sin ingredientes anotados)';
+  $('#detTags').innerHTML=(c.etiquetas||[]).map(t=>'<span class="tag '+t+'">'+esc(t)+'</span>').join('');
+  $('#ovDetail').classList.add('open');
+}
+$('#detCerrar').addEventListener('click',()=>$('#ovDetail').classList.remove('open'));
+$('#detAcciones').addEventListener('click',e=>{
+  $('#ovDetail').classList.remove('open');
+  const cellEl=document.querySelector('.cell[data-d="'+currentCell.d+'"][data-s="'+currentCell.s+'"]');
+  openPop(cellEl,e);
+});
+
+/* ---------- popover acciones ---------- */
 const pop=$('#pop');
 function openPop(cell,e){
   e.stopPropagation();
-  currentCell={d:+cell.dataset.d,s:cell.dataset.s};
   const c=(week.days[currentCell.d]||{})[currentCell.s];
   pop.innerHTML='<div class="poplabel">'+DIAS[currentCell.d]+' · '+slotLabel(currentCell.s)+'</div>'+
     '<button id="ppCambiar">🔄 Cambiar (biblioteca)</button>'+
+    '<button id="ppNueva">➕ Añadir nueva</button>'+
     '<button id="ppModificar">✏️ Modificar</button>'+
     (c?'<button id="ppVaciar" class="danger">✖ Vaciar casilla</button>':'');
   const r=cell.getBoundingClientRect();
   pop.style.display='block';
-  pop.style.left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-190)+'px';
+  pop.style.left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-200)+'px';
   pop.style.top=(r.bottom+window.scrollY+4)+'px';
   $('#ppCambiar').addEventListener('click',()=>{closePop();openPick()});
+  $('#ppNueva').addEventListener('click',()=>{closePop();openNew()});
   $('#ppModificar').addEventListener('click',()=>{closePop();openMod()});
-  const v=$('#ppVaciar');if(v)v.addEventListener('click',()=>{week.days[currentCell.d][currentCell.s]=null;dirty=true;closePop();renderTable()});
+  const v=$('#ppVaciar');if(v)v.addEventListener('click',()=>{week.days[currentCell.d][currentCell.s]=null;dirty=true;closePop();renderTables()});
 }
 function closePop(){pop.style.display='none'}
 document.addEventListener('click',e=>{if(!pop.contains(e.target))closePop()});
@@ -582,17 +747,22 @@ function renderPickList(){
   let list=state.platos.filter(p=>p.etiquetas.includes(tag));
   let rest=state.platos.filter(p=>!p.etiquetas.includes(tag));
   const match=p=>!q||norm(p.nombre+' '+p.ingredientes).includes(q);
-  list=list.filter(match);rest=rest.filter(match);
+  list=list.filter(match).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+  rest=rest.filter(match).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
   const item=p=>'<div class="pickitem" data-id="'+p.id+'"><div class="nm">'+esc(p.nombre)+'</div><div class="ing">'+esc(p.ingredientes)+'</div></div>';
   let html=list.map(item).join('');
   if(rest.length)html+='<div class="poplabel" style="padding:10px 14px 4px">Otras categorías</div>'+rest.map(item).join('');
-  $('#pickList').innerHTML=html||'<div class="pickempty">No hay platos. Regístralos en "Registrar comida".</div>';
+  $('#pickList').innerHTML=html||'<div class="pickempty">No hay platos. Usa "Añadir nueva".</div>';
   $('#pickList').querySelectorAll('.pickitem').forEach(el=>el.addEventListener('click',()=>{
     const p=state.platos.find(x=>x.id===el.dataset.id);
-    if(!week.days[currentCell.d])week.days[currentCell.d]={};
-    week.days[currentCell.d][currentCell.s]={id:p.id,nombre:p.nombre,ingredientes:p.ingredientes,etiquetas:p.etiquetas};
-    dirty=true;$('#ovPick').classList.remove('open');renderTable();
+    placeInCell(p);
+    $('#ovPick').classList.remove('open');
   }));
+}
+function placeInCell(p){
+  if(!week.days[currentCell.d])week.days[currentCell.d]={};
+  week.days[currentCell.d][currentCell.s]={id:p.id,nombre:p.nombre,ingredientes:p.ingredientes,etiquetas:p.etiquetas};
+  dirty=true;renderTables();
 }
 $('#pickSearch').addEventListener('input',renderPickList);
 $('#pickCerrar').addEventListener('click',()=>$('#ovPick').classList.remove('open'));
@@ -611,33 +781,55 @@ $('#modGuardar').addEventListener('click',()=>{
   if(!week.days[currentCell.d])week.days[currentCell.d]={};
   const prev=week.days[currentCell.d][currentCell.s];
   week.days[currentCell.d][currentCell.s]={id:prev?prev.id:null,nombre,ingredientes:$('#modIng').value.trim(),etiquetas:prev?prev.etiquetas:[]};
-  dirty=true;$('#ovMod').classList.remove('open');renderTable();
+  dirty=true;$('#ovMod').classList.remove('open');renderTables();
+});
+
+/* ---------- modal añadir nueva ---------- */
+function openNew(){
+  $('#newNombre').value='';$('#newIng').value='';$('#newSug').innerHTML='';
+  const def=currentCell.s==='sandwich'?['sandwich']:currentCell.d>=5?['finde',currentCell.s]:[currentCell.s];
+  renderTagPick($('#newTags'),def);
+  $('#ovNew').classList.add('open');$('#newNombre').focus();
+}
+$('#newAddTag').addEventListener('click',()=>addTagFlow($('#newNewTag'),$('#newTags')));
+$('#newCancelar').addEventListener('click',()=>$('#ovNew').classList.remove('open'));
+$('#newGuardar').addEventListener('click',()=>{
+  const nombre=$('#newNombre').value.trim();
+  if(!nombre){toast('Ponle nombre al plato');return}
+  const p={id:uid(),nombre,ingredientes:$('#newIng').value.trim(),etiquetas:pickedTags($('#newTags'))};
+  state.platos.push(p);saveLocal();
+  bg(api('savePlato',{plato:p}));
+  placeInCell(p);
+  $('#ovNew').classList.remove('open');
+  toast('«'+nombre+'» guardado y colocado ✔');
 });
 
 /* ---------- guardar semana / copiar ---------- */
 $('#btnGuardarSemana').addEventListener('click',()=>{
-  const wid=$('#weekStart').value;
-  state.menus[wid]={turno:week.turno,days:week.days,guardado:new Date().toISOString()};
+  state.menus[week.start]={turno:week.turno,days:week.days,guardado:new Date().toISOString()};
   saveLocal();dirty=false;
-  bg(api('saveWeek',{weekId:wid,turno:week.turno,days:week.days}));
+  bg(api('saveWeek',{weekId:week.start,turno:week.turno,days:week.days}));
+  renderTables();renderMonths();
   toast('Semana guardada ✔');
 });
 $('#btnCopiar').addEventListener('click',()=>{
-  const dates=weekDates(),slots=slotsForTurno();
-  let t='MENÚ SEMANA '+fmtDate(dates[0])+' a '+fmtDate(dates[4])+' · Turno de '+(week.turno==='manana'?'MAÑANA':'TARDE')+'\n\n';
-  DIAS.forEach((dia,i)=>{
-    t+=dia+' '+fmtDate(dates[i])+'\n';
-    slots.forEach(s=>{const c=(week.days[i]||{})[s];t+='  '+slotLabel(s)+': '+(c?c.nombre+(c.ingredientes?' ('+c.ingredientes+')':''):'—')+'\n'});
+  const dates=weekDates();
+  const mk=weekMonth(week.start);const [y,m]=mk.split('-').map(Number);
+  let t='MENÚ '+MESES[m-1].toUpperCase()+' · Semana '+weekNumberInMonth(week.start)+' ('+fmtDate(dates[0])+' a '+fmtDate(dates[6])+') · Turno de '+(week.turno==='manana'?'MAÑANA':'TARDE')+'\n\n';
+  for(let i=0;i<7;i++){
+    t+=DIAS[i]+' '+fmtDate(dates[i])+'\n';
+    slotsFor(i).forEach(s=>{const c=(week.days[i]||{})[s];t+='  '+slotLabel(s)+': '+(c?c.nombre+(c.ingredientes?' ('+c.ingredientes+')':''):'—')+'\n'});
     const kid=state.nino[isoDate(dates[i])];if(kid)t+='  Niño comió: '+kid+'\n';
     t+='\n';
-  });
-  t+='Balance: azul '+countTag('azul')+'/2 · legumbre '+countTag('legumbre')+'/2 · verdura '+countTag('verdura')+' platos\n';
+  }
+  t+='Balance L-V: azul '+countTag('azul')+'/2 · legumbre '+countTag('legumbre')+'/2 · verdura '+countTag('verdura')+' platos\n';
   navigator.clipboard.writeText(t).then(()=>toast('Copiado. Pégamelo en el chat y te lo reviso.'));
 });
 
-/* ---------- registrar ---------- */
+/* ---------- etiquetas ---------- */
+function sortedTags(){return [...state.tags].sort((a,b)=>a.localeCompare(b,'es'))}
 function renderTagPick(container,selected){
-  container.innerHTML=state.tags.map(t=>'<button type="button" class="tp'+(selected.includes(t)?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
+  container.innerHTML=sortedTags().map(t=>'<button type="button" class="tp'+(selected.includes(t)?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
   container.querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('on')));
 }
 function pickedTags(container){return [...container.querySelectorAll('.tp.on')].map(b=>b.dataset.t)}
@@ -648,6 +840,31 @@ function addTagFlow(inputEl,container){
   const sel=pickedTags(container);if(!sel.includes(t))sel.push(t);
   renderTagPick(container,sel);inputEl.value='';
 }
+
+/* ---------- autocompletado de ingredientes ---------- */
+function allIngredients(){
+  const set=new Set();
+  state.platos.forEach(p=>(p.ingredientes||'').split(',').forEach(i=>{const x=i.trim().toLowerCase();if(x)set.add(x)}));
+  return [...set].sort((a,b)=>a.localeCompare(b,'es'));
+}
+function attachSuggest(textarea,box){
+  textarea.addEventListener('input',()=>{
+    const val=textarea.value;
+    const frag=val.split(',').pop().trim().toLowerCase();
+    if(frag.length<2){box.innerHTML='';return}
+    const nf=norm(frag);
+    const matches=allIngredients().filter(i=>norm(i).startsWith(nf)&&norm(i)!==nf).slice(0,6);
+    box.innerHTML=matches.map(m=>'<button type="button">'+esc(m)+'</button>').join('');
+    box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      const parts=val.split(',');parts.pop();
+      parts.push(' '+b.textContent);
+      textarea.value=parts.join(',').replace(/^\s+/,'');
+      box.innerHTML='';textarea.focus();
+    }));
+  });
+}
+
+/* ---------- registrar ---------- */
 $('#regAddTag').addEventListener('click',()=>addTagFlow($('#regNewTag'),$('#regTags')));
 $('#regGuardar').addEventListener('click',()=>{
   const nombre=$('#regNombre').value.trim();
@@ -655,30 +872,36 @@ $('#regGuardar').addEventListener('click',()=>{
   const p={id:uid(),nombre,ingredientes:$('#regIng').value.trim(),etiquetas:pickedTags($('#regTags'))};
   state.platos.push(p);saveLocal();
   bg(api('savePlato',{plato:p}));
-  $('#regNombre').value='';$('#regIng').value='';renderTagPick($('#regTags'),[]);
+  $('#regNombre').value='';$('#regIng').value='';$('#regSug').innerHTML='';renderTagPick($('#regTags'),[]);
   toast('«'+nombre+'» guardado en la biblioteca ✔');
 });
 
 /* ---------- biblioteca ---------- */
 let libFilter=null;
 function renderLib(){
-  $('#libFilters').innerHTML=state.tags.map(t=>'<button class="tp'+(libFilter===t?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
+  $('#libFilters').innerHTML=sortedTags().map(t=>'<button class="tp'+(libFilter===t?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
   $('#libFilters').querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>{libFilter=libFilter===b.dataset.t?null:b.dataset.t;renderLib()}));
   const q=norm($('#libSearch').value);
   let list=state.platos.filter(p=>(!libFilter||p.etiquetas.includes(libFilter))&&(!q||norm(p.nombre+' '+p.ingredientes).includes(q)));
   list.sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
   $('#libCount').textContent=list.length+' plato'+(list.length===1?'':'s');
-  $('#libGrid').innerHTML=list.map(p=>'<div class="dish" data-id="'+p.id+'" tabindex="0"><div class="nm">'+esc(p.nombre)+'</div><div class="ing">'+esc(p.ingredientes)+'</div><div class="tags">'+p.etiquetas.map(t=>'<span class="tag '+t+'">'+esc(t)+'</span>').join('')+'</div></div>').join('')||'<div class="pickempty">Biblioteca vacía. Ve a "Registrar comida" para dar de alta tus platos.</div>';
-  $('#libGrid').querySelectorAll('.dish').forEach(el=>{
-    el.addEventListener('click',()=>openEdit(el.dataset.id));
-    el.addEventListener('keydown',e=>{if(e.key==='Enter')openEdit(el.dataset.id)});
+  $('#libList').innerHTML=list.map(p=>
+    '<div class="librow" data-id="'+p.id+'">'+
+      '<div class="librow-head" tabindex="0"><span class="chev">▶</span><span class="nm">'+esc(p.nombre)+'</span><span class="tags">'+p.etiquetas.map(t=>'<span class="tag '+t+'">'+esc(t)+'</span>').join('')+'</span></div>'+
+      '<div class="librow-body"><div class="ing">'+esc(p.ingredientes||'(sin ingredientes anotados)')+'</div><button class="btn small edbtn" data-id="'+p.id+'">✏️ Editar</button></div>'+
+    '</div>').join('')||'<div class="pickempty">Biblioteca vacía. Ve a "Registrar comida".</div>';
+  $('#libList').querySelectorAll('.librow-head').forEach(h=>{
+    const row=h.parentElement;
+    h.addEventListener('click',()=>row.classList.toggle('open'));
+    h.addEventListener('keydown',e=>{if(e.key==='Enter')row.classList.toggle('open')});
   });
+  $('#libList').querySelectorAll('.edbtn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openEdit(b.dataset.id)}));
 }
 $('#libSearch').addEventListener('input',renderLib);
 function openEdit(id){
   const p=state.platos.find(x=>x.id===id);if(!p)return;
   editingId=id;
-  $('#edNombre').value=p.nombre;$('#edIng').value=p.ingredientes;
+  $('#edNombre').value=p.nombre;$('#edIng').value=p.ingredientes;$('#edSug').innerHTML='';
   renderTagPick($('#edTags'),p.etiquetas);
   $('#ovEdit').classList.add('open');
 }
@@ -713,12 +936,12 @@ $('#ninoCargar').addEventListener('click',()=>{
   });
   if(!n){toast('No he reconocido ninguna línea. Formato: DD/MM: comida');return}
   saveLocal();bg(api('saveNino',{nino:state.nino}));
-  $('#ninoPaste').value='';renderNino();renderTable();
+  $('#ninoPaste').value='';renderNino();renderTables();
   toast(n+' días cargados ✔');
 });
 $('#ninoBorrarTodo').addEventListener('click',()=>{
   if(!confirm('¿Borrar todo el menú del niño?'))return;
-  state.nino={};saveLocal();bg(api('saveNino',{nino:{}}));renderNino();renderTable();
+  state.nino={};saveLocal();bg(api('saveNino',{nino:{}}));renderNino();renderTables();
 });
 function renderNino(){
   const entries=Object.entries(state.nino).sort();
@@ -727,7 +950,7 @@ function renderNino(){
     return '<div class="ninoitem"><span class="d">'+d.toLocaleDateString('es-ES',{weekday:'short',day:'2-digit',month:'2-digit'})+'</span><span>'+esc(txt)+'</span><button class="x" data-f="'+f+'" title="Borrar">×</button></div>';
   }).join(''):'<div class="pickempty">Sin menú cargado.</div>';
   $('#ninoList').querySelectorAll('.x').forEach(b=>b.addEventListener('click',()=>{
-    delete state.nino[b.dataset.f];saveLocal();bg(api('saveNino',{nino:state.nino}));renderNino();renderTable();
+    delete state.nino[b.dataset.f];saveLocal();bg(api('saveNino',{nino:state.nino}));renderNino();renderTables();
   }));
 }
 
@@ -737,8 +960,10 @@ $('#setGuardarUrl').addEventListener('click',async()=>{
   scriptUrl=$('#setUrl').value.trim();
   localStorage.setItem(LS_URL,scriptUrl);
   if(!scriptUrl){setSync('','Sin conectar');$('#offlineBanner').classList.add('show');return}
-  try{await remoteLoad();$('#offlineBanner').classList.remove('show');renderAll();toast('Conectado a tu hoja de Drive ✔');
-    if(!state.platos.length){seedRemote()}
+  try{
+    await remoteLoad();$('#offlineBanner').classList.remove('show');
+    if(!state.platos.length)await seedRemote();
+    loadWeek(week.start);renderAll();toast('Conectado a tu hoja de Drive ✔');
   }catch(e){setSync('err','Error de conexión');toast('No conecta: '+e.message)}
 });
 $('#setProbar').addEventListener('click',async()=>{
@@ -764,7 +989,7 @@ $('#setImport').addEventListener('click',()=>$('#setImportFile').click());
 $('#setImportFile').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{try{state={...state,...JSON.parse(r.result)};saveLocal();renderAll();toast('Datos importados ✔')}catch(err){toast('Archivo no válido')}};
+  r.onload=()=>{try{state={...state,...JSON.parse(r.result)};saveLocal();renderAll();loadWeek(week.start);toast('Datos importados ✔')}catch(err){toast('Archivo no válido')}};
   r.readAsText(f);
 });
 
@@ -772,11 +997,13 @@ $('#setImportFile').addEventListener('change',e=>{
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 
 /* ---------- arranque ---------- */
-function renderAll(){renderTable();renderLib();renderNino();renderTagPick($('#regTags'),[])}
+function renderAll(){renderTables();renderMonths();renderLib();renderNino();renderTagPick($('#regTags'),[])}
 (async function init(){
   loadLocal();
-  $('#weekStart').value=isoDate(nextMonday());
-  $('#weekStart').addEventListener('change',renderTable);
+  attachSuggest($('#regIng'),$('#regSug'));
+  attachSuggest($('#newIng'),$('#newSug'));
+  attachSuggest($('#edIng'),$('#edSug'));
+  week.start=isoDate(nextMonday());
   if(scriptUrl){
     try{
       await remoteLoad();$('#offlineBanner').classList.remove('show');
@@ -787,6 +1014,7 @@ function renderAll(){renderTable();renderLib();renderNino();renderTagPick($('#re
     $('#offlineBanner').classList.add('show');setSync('','Sin conectar');
   }
   seed();
+  loadWeek(week.start);
   renderAll();
 })();
 </script>
