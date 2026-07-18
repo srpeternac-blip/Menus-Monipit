@@ -80,18 +80,11 @@ p.viewsub{color:var(--ink-soft);margin-bottom:20px;font-size:14px}
 .genbar .spacer{flex:1}
 
 /* ---------- Layout calendario ---------- */
-.calwrap{display:grid;grid-template-columns:150px 1fr 190px;gap:16px;align-items:start}
-@media(max-width:1000px){.calwrap{grid-template-columns:150px 1fr}.horarios{grid-column:1/-1}}
+.calwrap{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start}
 @media(max-width:820px){.calwrap{grid-template-columns:1fr}}
-.horarios{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px;position:sticky;top:80px}
-.horarios h4{font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);padding:2px 4px 8px}
-.horarios table{width:100%;border-collapse:collapse;font-size:12px}
-.horarios th{font-family:var(--display);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding:4px 3px;text-align:center;border-bottom:1px solid var(--line)}
-.horarios td{padding:3px;text-align:center;border-bottom:1px solid var(--line-soft)}
-.horarios tr:last-child td{border-bottom:none}
-.horarios td.hd{font-family:var(--display);font-weight:800;color:var(--olive);font-size:14px}
-.horarios td.hd.wk{color:var(--mostaza)}
-.hcell{display:inline-block;min-width:56px;padding:3px 6px;border-radius:6px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--field)}
+td.turcell{padding:6px 4px!important;text-align:center;vertical-align:middle!important}
+.hcell{display:block;margin:2px auto;min-width:64px;max-width:76px;padding:2px 5px;border-radius:6px;font-weight:600;font-size:10.5px;cursor:pointer;border:1px solid var(--line);background:var(--field);white-space:nowrap}
+.hcell b{font-weight:800;margin-right:3px}
 .hcell:hover{background:var(--olive-tint)}
 .hcell.hM{background:var(--mostaza-tint);border-color:var(--mostaza)}
 .hcell.hT{background:var(--olive-tint);border-color:#C6D2A8}
@@ -185,6 +178,8 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .sugbox button:hover{background:var(--mostaza)}
 
 /* ---------- Registrar ---------- */
+.regwrap{display:grid;grid-template-columns:minmax(0,640px) minmax(240px,340px);gap:20px;align-items:start}
+@media(max-width:900px){.regwrap{grid-template-columns:1fr}}
 .formcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;max-width:640px}
 .formcard .row{margin-bottom:16px}
 .formcard label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:5px}
@@ -237,14 +232,16 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .ingrow .cats button:hover{background:var(--olive-tint)}
 .ingrow .cats button.on{background:var(--olive);border-color:var(--olive);color:#fff}
 
-.who{display:flex;gap:4px;margin-top:5px;margin-bottom:7px}
-.who button{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--field);font-size:11px;font-weight:800;color:var(--ink-soft);padding:0;opacity:.45}
-.who button.on{opacity:1;color:#fff}
-.who button.wP.on{background:#55632F;border-color:#55632F}
-.who button.wM.on{background:#33586B;border-color:#33586B}
-.who button.wR.on{background:#BF4326;border-color:#BF4326}
-.whomini{font-size:9px;font-weight:800;letter-spacing:.05em;margin-left:5px}
-.whomini .p{color:#55632F}.whomini .m{color:#33586B}.whomini .r{color:#BF4326}
+.cellsearch{width:100%;border:1px solid var(--olive);border-radius:7px;padding:6px 8px;background:var(--card);font-size:13.5px}
+#cellsug{position:absolute;z-index:120;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px rgba(35,38,25,.18);max-height:260px;overflow-y:auto;min-width:230px;display:none}
+#cellsug .pickitem{padding:8px 12px}
+#cellsug .special{color:var(--ink-soft);font-style:italic}
+.whoset{display:inline-flex;gap:3px;margin-left:7px;vertical-align:middle}
+.whoset button{border:none;background:none;padding:0 1px;font-weight:800;font-size:10px;color:var(--ink-soft);opacity:.3;cursor:pointer;transition:all .1s;line-height:1}
+.whoset button.on{opacity:1;font-size:14px}
+.whoset button.wP.on{color:#55632F}
+.whoset button.wM.on{color:#33586B}
+.whoset button.wR.on{color:#BF4326}
 
 #alerts{padding:10px 16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
 #alerts:empty{display:none}
@@ -314,14 +311,14 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
         <div class="balance" id="balance"></div>
       </div>
     </div>
-    <aside class="horarios" id="horariosBox"></aside>
   </div>
 </section>
 
 <!-- ================= REGISTRAR ================= -->
 <section class="view" id="view-registrar">
   <h2 class="viewtitle">Registrar comida</h2>
-  <p class="viewsub">Da de alta un plato nuevo en tu biblioteca.</p>
+  <p class="viewsub">Da de alta un plato nuevo en tu biblioteca. A la derecha puedes gestionar las etiquetas de toda la app.</p>
+  <div class="regwrap">
   <div class="formcard">
     <div class="row"><label>Nombre del plato</label><input type="text" id="regNombre"></div>
     <div class="row"><label>Ingredientes (separados por comas)</label><textarea id="regIng"></textarea>
@@ -331,6 +328,12 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
       <div class="newtag"><input type="text" id="regNewTag" placeholder="Nueva etiqueta…"><button class="btn small" id="regAddTag">Añadir</button></div>
     </div>
     <div class="foot" style="display:flex;justify-content:flex-end"><button class="btn primary" id="regGuardar">Guardar plato</button></div>
+  </div>
+  <div class="formcard" style="align-self:start">
+    <h3 style="font-family:var(--display);font-size:16px;margin-bottom:6px">Gestión de etiquetas</h3>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">Toca una etiqueta para renombrarla o eliminarla de toda la app. Se guarda solo.</p>
+    <div class="tagpick" id="tagMgr"></div>
+  </div>
   </div>
 </section>
 
@@ -442,6 +445,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 </main>
 
 <div id="pop"></div>
+<div id="cellsug"></div>
 
 <!-- Modal: elegir de biblioteca -->
 <div class="overlay" id="ovPick">
@@ -561,24 +565,25 @@ function weekNumberInMonth(startStr){
 
 
 /* ---------- diccionario de ingredientes (análisis automático) ---------- */
-const APP_VERSION='v4.0';
+const APP_VERSION='v4.1';
 const DICT={
   verdura:['judia verde','judias verdes','calabacin','espinaca','pimiento','cebolla','tomate','lechuga','rucula','zanahoria','brocoli','coliflor','alcachofa','berenjena','champinon','seta','puerro','apio','pepino','acelga','calabaza','esparrago','canonigo','remolacha','guisante','col ','coles','repollo','endibia','escarola','maiz','ajo tierno','borraja','cardo','nabo','rabano','verdura'],
   legumbre:['lenteja','garbanzo','alubia','judia blanca','judia pinta','soja','haba','frijol','legumbre'],
   pescado:['sardina','caballa','melva','atun','bonito','salmon','boqueron','anchoa','merluza','bacalao','abadejo','dorada','lubina','trucha','emperador','pez espada','rape','rodaballo','gamba','langostino','mejillon','calamar','sepia','pulpo','marisco','pescado'],
   proteina:['pollo','pavo','huevo','tortilla francesa','ternera','cerdo','lomo','magro','conejo','solomillo','pechuga','muslo','carne picada','jamon','yogur','queso','atun','salmon','sardina','caballa','melva','merluza','bacalao','lenteja','garbanzo','alubia','soja','huevos','tofu','proteina'],
-  grasabuena:['aceituna','aguacate','nuez','nueces','almendra','avellana','anacardo','pistacho','cacahuete','macadamia','semillas','pipas','tahini','sesamo'],
   carbohidrato:['arroz','pasta','pan','patata','quinoa','cuscus','gnochi','gnocchi','noqui','fajita','harina','avena','picatoste','cereal','cracker','tortita'],
   grasasaludable:['aceituna','aguacate','aove','aceite de oliva','nuez','nueces','macadamia','cacahuete','almendra','anacardo','pistacho','avellana','pipas','semillas','tahini','sesamo'],
+  especia:['comino','curry','pimenton','oregano','perejil','laurel','ajo','jengibre','especia','canela','tomillo','romero','albahaca','cilantro','azafran','clavo','nuez moscada','eneldo','cayena','guindilla'],
   procesado:['bacon','beicon','chorizo','salchichon','fuet','mortadela','salchicha','embutido','panceta','mayonesa','nata','mantequilla','bolleria','pizza','frito','fritura','rebozado','empanado','philadelphia','queso fundido','sobrasada','patatas fritas','hojaldre','precocinado']
 };
-const CAT_LABELS={verdura:'Verdura',legumbre:'Legumbre',pescado:'Pescado',proteina:'Proteína',grasabuena:'Grasa saludable',procesado:'Procesado/grasa',ignorar:'Ignorar'};
-const NEUTRAL=['sal','pimienta','limon','vinagre','agua','ajo','jengibre','especia','oregano','pimenton','comino','curry','perejil','laurel','caldo','tomate frito','azucar','miel'];
+const CAT_LABELS={verdura:'Verdura',legumbre:'Legumbre',pescado:'Pescado',proteina:'Proteína',grasasaludable:'Grasa saludable',carbohidrato:'Carbohidrato',especia:'Especia',procesado:'Procesado/grasa',ignorar:'Ignorar'};
+const NEUTRAL=['sal','pimienta','limon','vinagre','agua','caldo','tomate frito','azucar','miel'];
 function isNeutral(n){return NEUTRAL.some(kw=>new RegExp('\\b'+kw).test(n))}
 function classifyIng(ing){
   const n=norm(ing).trim();
   if(!n)return [];
-  const ov=(state.ingCats||{})[n];
+  let ov=(state.ingCats||{})[n];
+  if(ov==='grasabuena')ov='grasasaludable';
   if(ov)return ov==='ignorar'?[]:[ov];
   const cats=[];
   for(const cat in DICT){
@@ -675,7 +680,7 @@ function showView(view,push){
   const el=$('#view-'+view);if(el)el.classList.add('active');
   if(view==='biblioteca')renderLib();
   if(view==='nino')renderNino();
-  if(view==='registrar')renderTagPick($('#regTags'),[]);
+  if(view==='registrar'){renderTagPick($('#regTags'),[]);renderTagMgr()}
   if(view==='ingredientes'){renderIngCats();renderIngAll();document.getElementById('ingSearch').oninput=renderIngAll}
   if(push!==false)history.pushState({v:view},'','#'+view);
 }
@@ -686,8 +691,10 @@ $('#btnSand').addEventListener('click',()=>{week.sandwich=!week.sandwich;dirty=t
 function syncTurnoUI(){$('#sandState').textContent=week.sandwich?'ON':'OFF';$('#btnSand').style.background=week.sandwich?'var(--mostaza-tint)':'var(--card)'}
 
 
-function eatsP(c){return !c.who||c.who.includes('P')}
-function whoMini(c){if(!c.who||c.who.length===3)return '';return '<span class="whomini">'+['P','M','R'].filter(w=>c.who.includes(w)).map(w=>'<span class="'+w.toLowerCase()+'">'+w+'</span>').join('')+'</span>'}
+function eatsP(c){return !c.who||!c.who.length||c.who.includes('P')}
+function whoSet(c,i,slot,ix){
+  const act=c.who||[];
+  return '<span class="whoset">'+['P','M','R'].map(w=>'<button class="w'+w+(act.includes(w)?' on':'')+'" data-d="'+i+'" data-s="'+slot+'" data-ix="'+ix+'" data-w="'+w+'" title="'+(w==='P'?'Piti':w==='M'?'Moni':'R')+'">'+w+'</button>').join('')+'</span>'}
 const openCells=new Set();
 
 /* ---------- celdas multi-plato ---------- */
@@ -880,23 +887,11 @@ function horValue(dateObj,person){
   if(ov&&ov[person])return ov[person];
   return horDefault(dateObj,person);
 }
-function renderHorarios(){
-  const box=document.getElementById('horariosBox');if(!box)return;
-  const dates=weekDates();
-  const order=[5,6,0,1,2,3,4]; // finde previo arriba, como la hoja
-  let rows='';
-  order.forEach(i=>{
-    const d=dates[i];
-    rows+='<tr><td class="hd'+(i>=5?' wk':'')+'">'+DIA_L[i]+'</td>'+
-      ['P','M'].map(per=>{
-        const v=horValue(d,per);
-        return '<td><span class="hcell h'+v.charAt(0)+'" data-f="'+isoDate(d)+'" data-p="'+per+'">'+v+'</span></td>';
-      }).join('')+'</tr>';
-  });
-  box.innerHTML='<h4>Horarios</h4><table><thead><tr><th></th><th>Piti</th><th>Moni</th></tr></thead><tbody>'+rows+'</tbody></table>';
-  box.querySelectorAll('.hcell').forEach(c=>c.addEventListener('click',()=>{
+function bindHorarioCells(tbl){
+  tbl.querySelectorAll('.hcell').forEach(c=>c.addEventListener('click',e=>{
+    e.stopPropagation();
     const f=c.dataset.f,p=c.dataset.p;
-    const cur=c.textContent;
+    const cur=c.dataset.v;
     const next=HOR_VALS[(HOR_VALS.indexOf(cur)+1)%HOR_VALS.length];
     if(!state.horarios)state.horarios={};
     if(!state.horarios[f])state.horarios[f]={};
@@ -905,7 +900,7 @@ function renderHorarios(){
     else state.horarios[f][p]=next;
     saveLocal();
     bg(api('saveHorarios',{horarios:state.horarios}));
-    renderHorarios();
+    renderTables();
   }));
 }
 
@@ -920,22 +915,24 @@ function renderTables(){
   const wkSlots=week.sandwich?['comida','sandwich','cena']:['comida','cena'];
   renderBlock($('#tableWeekdays'),[0,1,2,3,4],dates,wkSlots);
   renderBalance();
-  renderHorarios();
 }
 function renderBlock(tbl,dayIdxs,dates,slots){
-  let html='<thead><tr><th class="daycol"></th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+'</tr></thead><tbody>';
+  let html='<thead><tr><th class="daycol"></th><th style="width:88px;text-align:center">Turnos</th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+'</tr></thead><tbody>';
   dayIdxs.forEach(i=>{
     const kid=state.nino[isoDate(dates[i])]||'';
     html+='<tr><td class="day'+(i>=5?' wk':'')+'">'+DIA_L[i]+'<small>'+fmtDate(dates[i])+'</small></td>';
+    html+='<td class="turcell">'+['P','M'].map(per=>{
+      const v=horValue(dates[i],per);
+      return '<span class="hcell h'+v.charAt(0)+'" data-f="'+isoDate(dates[i])+'" data-p="'+per+'" data-v="'+v+'" title="'+(per==='P'?'Piti':'Moni')+'"><b>'+per+'</b>'+v+'</span>';
+    }).join('')+'</td>';
     slots.forEach(slot=>{
       const arr=cellArr(i,slot);
       const warn=(slot==='cena'&&i<5&&arr.some(c=>overlapsNino(c,kid)))?' nino-warn':'';
       if(arr.length){
         const openx=openCells.has(i+'-'+slot)?' openx':'';
         html+='<td><div class="cell'+warn+openx+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0">'+
-          arr.map(c=>'<div class="nm">'+esc(c.nombre)+whoMini(c)+'</div>').join('')+
-          '<div class="det">'+arr.map((c,ix)=>'<div class="ing">'+esc(c.ingredientes||'(sin ingredientes anotados)')+'</div>'+
-            '<div class="who">'+['P','M','R'].map(w=>'<button class="w'+w+((!c.who||c.who.includes(w))?' on':'')+'" data-d="'+i+'" data-s="'+slot+'" data-ix="'+ix+'" data-w="'+w+'">'+w+'</button>').join('')+'</div>').join('')+'</div>'+
+          arr.map((c,ix)=>'<div class="nm">'+esc(c.nombre)+whoSet(c,i,slot,ix)+'</div>').join('')+
+          '<div class="det">'+arr.map(c=>'<div class="ing">'+esc(c.ingredientes||'(sin ingredientes anotados)')+'</div>').join('')+'</div>'+
           '<button class="cellmenu" data-d="'+i+'" data-s="'+slot+'" title="Acciones">⋮</button></div></td>';
       }else{
         html+='<td><div class="cell empty" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">—</div></div></td>';
@@ -954,7 +951,7 @@ function renderBlock(tbl,dayIdxs,dates,slots){
         const k=d+'-'+s;
         if(openCells.has(k))openCells.delete(k);else openCells.add(k);
         c.classList.toggle('openx');
-      }else openPop(c,e);
+      }else openCellSearch(c,e);
     });
     c.addEventListener('keydown',e=>{if(e.key==='Enter')c.click()});
   });
@@ -963,13 +960,14 @@ function renderBlock(tbl,dayIdxs,dates,slots){
     currentCell={d:+b.dataset.d,s:b.dataset.s};
     openPop(b.closest('.cell'),e);
   }));
-  tbl.querySelectorAll('.who button').forEach(b=>b.addEventListener('click',e=>{
+  bindHorarioCells(tbl);
+  tbl.querySelectorAll('.whoset button').forEach(b=>b.addEventListener('click',e=>{
     e.stopPropagation();
     const d=+b.dataset.d,s=b.dataset.s,ix=+b.dataset.ix,w=b.dataset.w;
     const dish=cellArr(d,s)[ix];if(!dish)return;
-    let who=dish.who?dish.who.slice():['P','M','R'];
-    if(who.includes(w)){if(who.length>1)who=who.filter(x=>x!==w)}else who.push(w);
-    if(who.length===3)delete dish.who;else dish.who=who;
+    let who=dish.who?dish.who.slice():[];
+    if(who.includes(w))who=who.filter(x=>x!==w);else who.push(w);
+    if(!who.length||who.length===3)delete dish.who;else dish.who=who;
     dirty=true;renderTables();
   }));
 }
@@ -1012,6 +1010,56 @@ function renderAlerts(pe,le,ve){
   if(!A.length)A.push(['good','✔','Semana equilibrada: pescado, legumbres, verdura y proteína cubiertos sin exceso de procesados.']);
   $('#alerts').innerHTML=A.map(a=>'<div class="alert '+a[0]+'"><span>'+a[1]+'</span><span>'+a[2]+'</span></div>').join('');
 }
+
+
+/* ---------- buscador inline en celda vacía ---------- */
+const cellsug=document.getElementById('cellsug');
+function openCellSearch(cell,e){
+  e.stopPropagation();
+  closePop();
+  const d=currentCell.d,s=currentCell.s;
+  cell.innerHTML='<input type="text" class="cellsearch" placeholder="Escribe para buscar…">';
+  const input=cell.querySelector('input');
+  input.focus();
+  const r=cell.getBoundingClientRect();
+  cellsug.style.left=(r.left+window.scrollX)+'px';
+  cellsug.style.top=(r.bottom+window.scrollY+2)+'px';
+  cellsug.style.minWidth=r.width+'px';
+  function renderSug(){
+    const q=norm(input.value);
+    const tag=s==='sandwich'?'sandwich':s;
+    let list=state.platos.filter(p=>p.etiquetas.includes(tag));
+    let rest=state.platos.filter(p=>!p.etiquetas.includes(tag));
+    const match=p=>!q||norm(p.nombre+' '+p.ingredientes).includes(q);
+    list=list.filter(match).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')).slice(0,7);
+    rest=rest.filter(match).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')).slice(0,4);
+    const item=p=>'<div class="pickitem" data-id="'+p.id+'"><div class="nm">'+esc(p.nombre)+'</div></div>';
+    cellsug.innerHTML=list.map(item).join('')+(rest.length?'<div class="poplabel" style="padding:8px 12px 2px">Otras categorías</div>'+rest.map(item).join(''):'')+
+      '<div class="pickitem" id="csNuevo" style="background:var(--olive-tint);font-weight:700">➕ Registrar nuevo'+(input.value.trim()?' «'+esc(input.value.trim())+'»':'')+'</div>'+
+      '<div class="pickitem special" id="csEspecial">✏️ Especial (texto libre)</div>';
+    cellsug.style.display='block';
+    cellsug.querySelectorAll('.pickitem[data-id]').forEach(el=>el.addEventListener('mousedown',ev=>{
+      ev.preventDefault();
+      const p=state.platos.find(x=>x.id===el.dataset.id);
+      pickAction='append';
+      closeCellSearch();
+      placeInCell(p);
+    }));
+    const nu=cellsug.querySelector('#csNuevo');
+    if(nu)nu.addEventListener('mousedown',ev=>{ev.preventDefault();const txt=input.value.trim();closeCellSearch();pickAction='append';openNew();if(txt)$('#newNombre').value=txt;});
+    const espb=cellsug.querySelector('#csEspecial');
+    if(espb)espb.addEventListener('mousedown',ev=>{ev.preventDefault();const txt=input.value.trim();closeCellSearch();openMod();if(txt)$('#modNombre').value=txt;});
+  }
+  function closeCellSearch(){cellsug.style.display='none';cellsug.innerHTML='';renderTables()}
+  input.addEventListener('input',renderSug);
+  input.addEventListener('keydown',ev=>{
+    if(ev.key==='Escape')closeCellSearch();
+    if(ev.key==='Enter'){const first=cellsug.querySelector('.pickitem[data-id]');if(first){const p=state.platos.find(x=>x.id===first.dataset.id);pickAction='append';closeCellSearch();placeInCell(p)}}
+  });
+  input.addEventListener('blur',()=>setTimeout(()=>{if(cellsug.style.display==='block')closeCellSearch()},150));
+  renderSug();
+}
+document.addEventListener('click',e=>{if(cellsug.style.display==='block'&&!cellsug.contains(e.target)&&!e.target.classList.contains('cellsearch')){cellsug.style.display='none';cellsug.innerHTML='';renderTables()}});
 
 /* ---------- popover acciones ---------- */
 const pop=$('#pop');
@@ -1208,28 +1256,44 @@ $('#regGuardar').addEventListener('click',()=>{
   toast('«'+nombre+'» guardado en la biblioteca ✔');
 });
 
+
+/* ---------- gestión de etiquetas ---------- */
+const CORE_TAGS=['comida','cena','sandwich','bocata'];
+function renderTagMgr(){
+  const box=document.getElementById('tagMgr');if(!box)return;
+  box.innerHTML=sortedTags().map(t=>'<button type="button" class="tp" data-t="'+esc(t)+'">'+esc(t)+(CORE_TAGS.includes(t)?' \ud83d\udd12':'')+'</button>').join('');
+  box.querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>{
+    const t=b.dataset.t;
+    if(CORE_TAGS.includes(t)){toast('\u00ab'+t+'\u00bb es una etiqueta b\u00e1sica de la app, no se puede tocar');return}
+    const usos=state.platos.filter(p=>p.etiquetas.includes(t)).length;
+    const accion=prompt('Etiqueta \u00ab'+t+'\u00bb ('+usos+' plato(s)).\n\nEscribe un NOMBRE NUEVO para renombrarla,\no escribe BORRAR para eliminarla:',t);
+    if(accion===null)return;
+    const val=accion.trim();
+    if(!val||val===t)return;
+    const changed=[];
+    if(norm(val)==='borrar'){
+      state.tags=state.tags.filter(x=>x!==t);
+      state.platos.forEach(p=>{if(p.etiquetas.includes(t)){p.etiquetas=p.etiquetas.filter(x=>x!==t);changed.push(p)}});
+      toast('Etiqueta \u00ab'+t+'\u00bb eliminada de '+changed.length+' plato(s)');
+    }else{
+      const nt=norm(val).replace(/\s+/g,'-');
+      if(!state.tags.includes(nt))state.tags.push(nt);
+      state.tags=state.tags.filter(x=>x!==t);
+      state.platos.forEach(p=>{if(p.etiquetas.includes(t)){p.etiquetas=[...new Set(p.etiquetas.map(x=>x===t?nt:x))];changed.push(p)}});
+      toast('\u00ab'+t+'\u00bb \u2192 \u00ab'+nt+'\u00bb en '+changed.length+' plato(s)');
+    }
+    saveLocal();
+    bg(api('saveTags',{tags:state.tags}));
+    changed.forEach(p=>bg(api('savePlato',{plato:p})));
+    renderTagMgr();renderLib();renderTables();renderTagPick($('#regTags'),pickedTags($('#regTags')));
+  }));
+}
+
 /* ---------- biblioteca ---------- */
 let libFilter=null;
 function renderLib(){
-  const CORE_TAGS=['comida','cena','sandwich','bocata'];
-  $('#libFilters').innerHTML=sortedTags().map(t=>'<button class="tp'+(libFilter===t?' on':'')+'" data-t="'+esc(t)+'" style="position:relative;padding-right:'+(CORE_TAGS.includes(t)?'13px':'24px')+'">'+esc(t)+(CORE_TAGS.includes(t)?'':'<span class="tagx" data-t="'+esc(t)+'" style="position:absolute;top:-1px;right:6px;font-weight:700;opacity:.55">×</span>')+'</button>').join('');
-  $('#libFilters').querySelectorAll('.tp').forEach(b=>b.addEventListener('click',e=>{
-    if(e.target.classList.contains('tagx')){
-      const t=e.target.dataset.t;
-      if(!confirm('¿Eliminar la etiqueta «'+t+'»?\nSe quitará de todos los platos que la tengan.'))return;
-      state.tags=state.tags.filter(x=>x!==t);
-      const changed=[];
-      state.platos.forEach(p=>{if(p.etiquetas.includes(t)){p.etiquetas=p.etiquetas.filter(x=>x!==t);changed.push(p)}});
-      if(libFilter===t)libFilter=null;
-      saveLocal();
-      bg(api('saveTags',{tags:state.tags}));
-      changed.forEach(p=>bg(api('savePlato',{plato:p})));
-      renderLib();renderTables();
-      toast('Etiqueta «'+t+'» eliminada de '+changed.length+' plato(s)');
-      return;
-    }
-    libFilter=libFilter===b.dataset.t?null:b.dataset.t;renderLib();
-  }));
+  $('#libFilters').innerHTML=sortedTags().map(t=>'<button class="tp'+(libFilter===t?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
+  $('#libFilters').querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>{libFilter=libFilter===b.dataset.t?null:b.dataset.t;renderLib()}));
   const q=norm($('#libSearch').value);
   let list=state.platos.filter(p=>(!libFilter||p.etiquetas.includes(libFilter))&&(!q||norm(p.nombre+' '+p.ingredientes).includes(q)));
   list.sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
@@ -1438,7 +1502,7 @@ function renderIngAll(){
   const list=ingredientCounts().filter(x=>!q||norm(x.name).includes(q));
   if(!list.length){box.innerHTML='<p style="font-size:13.5px;color:var(--ink-soft)">Sin ingredientes.</p>';return}
   box.innerHTML=list.map(x=>{
-    const cats=classifyIng(x.name);
+    const cats=[...new Set(classifyIng(x.name))];
     const catHtml=cats.length?cats.map(c=>'<span class="tag '+c+'">'+esc(CAT_LABELS[c]||c)+'</span>').join(''):(isNeutral(norm(x.name))?'<span class="tag" style="opacity:.5">neutro</span>':'<span class="tag" style="background:var(--pimiento-tint);color:var(--pimiento)">sin categoría</span>');
     const platosCon=state.platos.filter(p=>(p.ingredientes||'').split(',').some(i=>i.trim().toLowerCase()===x.name.toLowerCase())).map(p=>p.nombre);
     return '<div class="ingrow" data-open="0"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;cursor:pointer" class="ingrow-head"><span class="in" style="text-transform:capitalize">'+esc(x.name)+'</span><span class="cats" style="gap:4px">'+catHtml+'</span><span style="font-size:12px;color:var(--ink-soft)">'+x.count+' plato'+(x.count===1?'':'s')+'</span><span style="flex:1"></span>'+
@@ -1479,7 +1543,7 @@ $('#appVersion').textContent=APP_VERSION;
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 
 /* ---------- arranque ---------- */
-function renderAll(){renderTables();renderMonths();renderLib();renderNino();renderTagPick($('#regTags'),[]);updateIngDot()}
+function renderAll(){renderTables();renderMonths();renderLib();renderNino();renderTagPick($('#regTags'),[]);renderTagMgr();updateIngDot()}
 (async function init(){
   applyTheme(localStorage.getItem(LS_THEME)||'light');
   applyFont(localStorage.getItem(LS_FONT)||'1');
