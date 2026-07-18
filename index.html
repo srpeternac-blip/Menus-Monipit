@@ -267,6 +267,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
       <button id="tTar" class="tarde">Tarde</button>
     </div>
     <div class="spacer"></div>
+    <button class="btn small" id="btnVaciar">Vaciar semana</button>
     <button class="btn primary" id="btnGuardarSemana">💾 Guardar semana</button>
   </div>
 
@@ -314,6 +315,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
   <h2 class="viewtitle">Biblioteca</h2>
   <p class="viewsub">Todos tus platos. Toca uno para ver sus ingredientes; desde ahí puedes editarlo.</p>
   <div class="libbar">
+    <button class="btn primary" id="libNueva">➕ Nueva receta</button>
     <input type="search" id="libSearch" placeholder="Buscar plato o ingrediente…">
     <div class="filters" id="libFilters"></div>
   </div>
@@ -341,8 +343,16 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 <!-- ================= INGREDIENTES ================= -->
 <section class="view" id="view-ingredientes">
   <h2 class="viewtitle">Ingredientes</h2>
-  <p class="viewsub">Ingredientes de tu biblioteca que el análisis aún no reconoce. Asígnales categoría con un clic (o ignóralos) para que cuenten en los avisos y contadores.</p>
-  <div class="formcard"><div id="ingCatsList"></div></div>
+  <p class="viewsub">Clasifica los que el análisis no reconozca y corrige o borra cualquier ingrediente de tu biblioteca (los cambios se aplican a todos los platos que lo usen).</p>
+  <div class="formcard" style="margin-bottom:18px">
+    <h3 style="font-family:var(--display);font-size:16px;margin-bottom:10px">Sin clasificar</h3>
+    <div id="ingCatsList"></div>
+  </div>
+  <div class="formcard">
+    <h3 style="font-family:var(--display);font-size:16px;margin-bottom:10px">Todos los ingredientes</h3>
+    <input type="search" id="ingSearch" placeholder="Buscar ingrediente…" style="width:100%;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--field);margin-bottom:10px">
+    <div id="ingAllList"></div>
+  </div>
 </section>
 
 <!-- ================= AJUSTES ================= -->
@@ -521,7 +531,7 @@ function weekNumberInMonth(startStr){
 
 
 /* ---------- diccionario de ingredientes (análisis automático) ---------- */
-const APP_VERSION='v3.1';
+const APP_VERSION='v3.2';
 const DICT={
   verdura:['judia verde','judias verdes','calabacin','espinaca','pimiento','cebolla','tomate','lechuga','rucula','zanahoria','brocoli','coliflor','alcachofa','berenjena','champinon','seta','puerro','apio','pepino','acelga','calabaza','esparrago','canonigo','remolacha','guisante','col ','coles','repollo','endibia','escarola','maiz','ajo tierno','borraja','cardo','nabo','rabano','verdura'],
   legumbre:['lenteja','garbanzo','alubia','judia blanca','judia pinta','soja','haba','frijol','legumbre'],
@@ -589,7 +599,7 @@ async function remoteLoad(){
   saveLocal(); setSync('ok','Conectado a Drive');
 }
 function bg(p){
-  if(!scriptUrl)return;
+  if(!scriptUrl){if(p&&p.catch)p.catch(()=>{});return}
   setSync('busy','Guardando…');
   p.then(()=>setSync('ok','Guardado en Drive')).catch(e=>{setSync('err','Error al guardar');toast('⚠ No se pudo guardar en Drive: '+e.message)});
 }
@@ -628,7 +638,7 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
   if(b.dataset.view==='biblioteca')renderLib();
   if(b.dataset.view==='nino')renderNino();
   if(b.dataset.view==='registrar')renderTagPick($('#regTags'),[]);
-  if(b.dataset.view==='ingredientes')renderIngCats();
+  if(b.dataset.view==='ingredientes'){renderIngCats();renderIngAll();document.getElementById('ingSearch').oninput=renderIngAll}
 }));
 
 /* ---------- turno ---------- */
@@ -667,7 +677,7 @@ $('#nextWeek').addEventListener('click',()=>shiftWeek(1));
 function renderMonths(){
   const box=$('#monthsBox');
   const byMonth={};
-  Object.keys(state.menus).forEach(wid=>{const mk=weekMonth(wid);if(!byMonth[mk])byMonth[mk]=[];byMonth[mk].push(wid)});
+  Object.keys(state.menus).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).forEach(wid=>{const mk=weekMonth(wid);if(!byMonth[mk])byMonth[mk]=[];byMonth[mk].push(wid)});
   const keys=Object.keys(byMonth).sort().reverse();
   const curMk=weekMonth(week.start);
   let html='<h4>Historial</h4>';
@@ -717,47 +727,78 @@ function generar(){
   if(!state.platos.length){toast('La biblioteca está vacía. Registra platos primero.');return}
   const dates=weekDates(), avoidLast=lastWeekNames(), used=new Set();
   week.days={};
-  for(let i=0;i<7;i++){
+  // contadores en vivo para cumplir los óptimos sobre la marcha
+  let pe=0, le=0, veTot=0, proc=0;
+  const veDay=[false,false,false,false,false];
+  function scoreDish(p,i,slot){
+    const cats=dishCats(p);
+    let s=Math.random(); // desempate aleatorio
+    if(pe<2&&cats.has('pescado'))s+=5;
+    if(le<2&&cats.has('legumbre'))s+=5;
+    if(!veDay[i]&&cats.has('verdura'))s+=3;
+    if(veTot<10&&cats.has('verdura'))s+=2;
+    if(cats.has('procesado'))s-=(proc>=2?6:2);
+    if(avoidLast.has(norm(p.nombre)))s-=4;
+    return s;
+  }
+  function tally(p,i){
+    const cats=dishCats(p);
+    if(cats.has('pescado'))pe++;
+    if(cats.has('legumbre'))le++;
+    if(cats.has('verdura')){veTot++;veDay[i]=true}
+    if(cats.has('procesado'))proc++;
+  }
+  // L-V
+  for(let i=0;i<5;i++){
     week.days[i]={};
     const kid=state.nino[isoDate(dates[i])]||'';
     slotsFor(i).forEach(slot=>{
       let pool;
-      if(i>=5){ // finde: platos etiquetados finde/domingo/comida-finde/cena-finde
-        const FT=['finde','domingo','comida-finde','cena-finde'];
-        pool=state.platos.filter(p=>p.etiquetas.some(t=>FT.includes(t)));
-        const bySlot=pool.filter(p=>p.etiquetas.includes(slot)||p.etiquetas.includes(slot+'-finde'));
-        if(bySlot.length)pool=bySlot;
-      }else if(slot==='cena'&&i===4){ // viernes premio
+      const esPremio=(slot==='cena'&&i===4);
+      if(esPremio){
         pool=state.platos.filter(p=>p.etiquetas.includes('bocata'));
         if(!pool.length)pool=state.platos.filter(p=>p.etiquetas.includes('cena'));
       }else{
         pool=state.platos.filter(p=>p.etiquetas.includes(slot==='sandwich'?'sandwich':slot));
       }
-      const chosen=pick(pool,used,avoidLast,kid,slot==='cena'&&i<5);
-      if(chosen){week.days[i][slot]=[{id:chosen.id,nombre:chosen.nombre,ingredientes:chosen.ingredientes,etiquetas:chosen.etiquetas}];used.add(norm(chosen.nombre))}
-      else week.days[i][slot]=[];
+      // filtros duros
+      let cands=pool.filter(p=>!used.has(norm(p.nombre)));
+      if(slot==='cena')cands=cands.filter(p=>!overlapsNino(p,kid));
+      // proteína obligatoria en comida y cena (salvo premio del viernes)
+      if((slot==='comida'||slot==='cena')&&!esPremio){
+        const conProt=cands.filter(p=>{const c=dishCats(p);return c.has('proteina')||c.has('pescado')||c.has('legumbre')});
+        if(conProt.length)cands=conProt;
+      }
+      if(!cands.length)cands=pool.filter(p=>!used.has(norm(p.nombre)));
+      if(!cands.length){week.days[i][slot]=[];return}
+      // elegir el de mayor puntuación (premio del viernes: aleatorio puro entre bocatas)
+      let chosen;
+      if(esPremio)chosen=cands[Math.floor(Math.random()*cands.length)];
+      else{
+        let best=-1e9;
+        cands.forEach(p=>{const s=scoreDish(p,i,slot);if(s>best){best=s;chosen=p}});
+      }
+      week.days[i][slot]=[{id:chosen.id,nombre:chosen.nombre,ingredientes:chosen.ingredientes,etiquetas:chosen.etiquetas}];
+      used.add(norm(chosen.nombre));
+      if(!esPremio)tally(chosen,i);
     });
   }
-  // mínimos L-V: pescado>=2, legumbre>=2
-  [['pescado','azul'],['legumbre']].forEach(tagGroup=>{
-    let count=countAny(tagGroup);
-    if(count>=2)return;
-    const candidates=state.platos.filter(p=>p.etiquetas.some(t=>tagGroup.includes(t)));
-    outer:
-    for(let i=0;i<5&&count<2;i++){
-      for(const slot of slotsFor(i)){
-        if(slot==='cena'&&i===4)continue;
-        const cur=cellArr(i,slot);
-        const catKey=tagGroup.includes('azul')?'pescado':tagGroup[0];
-        if(cur.some(c=>dishCats(c).has(catKey)))continue;
-        const kid=state.nino[isoDate(dates[i])]||'';
-        const pool=candidates.filter(p=>p.etiquetas.includes(slot==='sandwich'?'sandwich':slot));
-        const usedNow=new Set();for(let j=0;j<7;j++){Object.values(week.days[j]||{}).forEach(v=>{(Array.isArray(v)?v:(v?[v]:[])).forEach(c=>usedNow.add(norm(c.nombre)))})}
-        const ch=pick(pool,usedNow,avoidLast,kid,slot==='cena');
-        if(ch){week.days[i][slot]=[{id:ch.id,nombre:ch.nombre,ingredientes:ch.ingredientes,etiquetas:ch.etiquetas}];count++;if(count>=2)break outer}
-      }
-    }
-  });
+  // finde (libre, sin exigencias)
+  for(let i=5;i<7;i++){
+    week.days[i]={};
+    slotsFor(i).forEach(slot=>{
+      const FT=['finde','domingo','comida-finde','cena-finde'];
+      let pool=state.platos.filter(p=>p.etiquetas.some(t=>FT.includes(t)));
+      const bySlot=pool.filter(p=>p.etiquetas.includes(slot)||p.etiquetas.includes(slot+'-finde'));
+      if(bySlot.length)pool=bySlot;
+      const cands=pool.filter(p=>!used.has(norm(p.nombre)));
+      const from=cands.length?cands:pool;
+      if(!from.length){week.days[i][slot]=[];return}
+      const chosen=from[Math.floor(Math.random()*from.length)];
+      week.days[i][slot]=[{id:chosen.id,nombre:chosen.nombre,ingredientes:chosen.ingredientes,etiquetas:chosen.etiquetas}];
+      used.add(norm(chosen.nombre));
+    });
+  }
   dirty=true; renderTables(); toast('Menú generado. Toca las casillas para ajustarlo.');
 }
 function countCat(cat){ // solo L-V, todos los platos de cada casilla
@@ -766,6 +807,7 @@ function countCat(cat){ // solo L-V, todos los platos de cada casilla
 function countTag(tag){return countCat(tag==='azul'?'pescado':tag)}
 function countAny(tags){return countCat(tags.includes('pescado')||tags.includes('azul')?'pescado':tags[0])}
 $('#btnGenerar').addEventListener('click',generar);
+$('#btnVaciar').addEventListener('click',()=>{if(!confirm('¿Vaciar toda la semana?'))return;week.days={};dirty=true;renderTables()});
 
 /* ---------- tablas ---------- */
 function renderTables(){
@@ -938,12 +980,15 @@ $('#modGuardar').addEventListener('click',()=>{
 });
 
 /* ---------- modal añadir nueva ---------- */
-function openNew(){
+let newPlaces=true;
+function openNew(place){
+  newPlaces=place!==false;
   $('#newNombre').value='';$('#newIng').value='';$('#newSug').innerHTML='';
-  const def=currentCell.s==='sandwich'?['sandwich']:currentCell.d>=5?['finde',currentCell.s]:[currentCell.s];
+  const def=newPlaces?(currentCell.s==='sandwich'?['sandwich']:currentCell.d>=5?['finde',currentCell.s]:[currentCell.s]):[];
   renderTagPick($('#newTags'),def);
   $('#ovNew').classList.add('open');$('#newNombre').focus();
 }
+$('#libNueva').addEventListener('click',()=>openNew(false));
 $('#newAddTag').addEventListener('click',()=>addTagFlow($('#newNewTag'),$('#newTags')));
 $('#newCancelar').addEventListener('click',()=>$('#ovNew').classList.remove('open'));
 $('#newGuardar').addEventListener('click',()=>{
@@ -952,10 +997,10 @@ $('#newGuardar').addEventListener('click',()=>{
   const p={id:uid(),nombre,ingredientes:$('#newIng').value.trim(),etiquetas:pickedTags($('#newTags'))};
   state.platos.push(p);saveLocal();
   bg(api('savePlato',{plato:p}));
-  placeInCell(p);
+  if(newPlaces)placeInCell(p);else renderLib();
   updateIngDot();
   $('#ovNew').classList.remove('open');
-  toast('«'+nombre+'» guardado y colocado ✔');
+  toast('«'+nombre+'» guardado'+(newPlaces?' y colocado':' en la biblioteca')+' ✔');
 });
 
 /* ---------- guardar semana / copiar ---------- */
@@ -1145,7 +1190,57 @@ $('#setSheetUrl').value=localStorage.getItem(LS_SHEET)||'';
 $('#setGuardarSheet').addEventListener('click',()=>{localStorage.setItem(LS_SHEET,$('#setSheetUrl').value.trim());toast('Enlace guardado ✔')});
 $('#setAbrirSheet').addEventListener('click',()=>{const u=localStorage.getItem(LS_SHEET)||$('#setSheetUrl').value.trim();if(u)window.open(u,'_blank');else toast('Guarda antes el enlace de tu hoja')});
 
-function updateIngDot(){const b=document.getElementById('navIng');if(b)b.classList.toggle('has',unclassifiedIngredients().length>0)}
+function updateIngDot(){const b=document.getElementById('navIng');if(b)b.classList.toggle('has',unclassifiedIngredients().length>0);const d=document.getElementById('ingDot');if(d)d.style.display=unclassifiedIngredients().length?'inline-block':'none'}
+function ingredientCounts(){
+  const map=new Map();
+  state.platos.forEach(p=>(p.ingredientes||'').split(',').forEach(i=>{
+    const x=i.trim();if(!x)return;
+    const k=x.toLowerCase();
+    if(!map.has(k))map.set(k,{name:x,count:0});
+    map.get(k).count++;
+  }));
+  return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name,'es'));
+}
+function applyIngredientChange(oldName,newName){ // newName='' borra
+  const on=norm(oldName);
+  const changed=[];
+  state.platos.forEach(p=>{
+    const parts=(p.ingredientes||'').split(',').map(x=>x.trim()).filter(Boolean);
+    let hit=false;
+    let np=parts.map(x=>{if(norm(x)===on){hit=true;return newName}return x}).filter(Boolean);
+    if(hit){p.ingredientes=np.join(', ');changed.push(p)}
+  });
+  // también en la semana en pantalla
+  for(const d in week.days){for(const s in week.days[d]){cellArr(+d,s).forEach(c=>{
+    const parts=(c.ingredientes||'').split(',').map(x=>x.trim()).filter(Boolean);
+    if(parts.some(x=>norm(x)===on))c.ingredientes=parts.map(x=>norm(x)===on?newName:x).filter(Boolean).join(', ');
+  })}}
+  if(state.ingCats&&state.ingCats[on]){
+    if(newName)state.ingCats[norm(newName)]=state.ingCats[on];
+    delete state.ingCats[on];
+    bg(api('saveIngCats',{ingCats:state.ingCats}));
+  }
+  saveLocal();
+  changed.forEach(p=>bg(api('savePlato',{plato:p})));
+  renderIngAll();renderIngCats();renderLib();renderTables();updateIngDot();
+  toast(newName?('«'+oldName+'» → «'+newName+'» en '+changed.length+' plato(s)'):('«'+oldName+'» borrado de '+changed.length+' plato(s)'));
+}
+function renderIngAll(){
+  const box=document.getElementById('ingAllList');if(!box)return;
+  const q=norm(document.getElementById('ingSearch')?document.getElementById('ingSearch').value:'');
+  const list=ingredientCounts().filter(x=>!q||norm(x.name).includes(q));
+  if(!list.length){box.innerHTML='<p style="font-size:13.5px;color:var(--ink-soft)">Sin ingredientes.</p>';return}
+  box.innerHTML=list.map(x=>'<div class="ingrow"><span class="in">'+esc(x.name)+'</span><span style="font-size:12px;color:var(--ink-soft)">'+x.count+' plato'+(x.count===1?'':'s')+'</span><span style="flex:1"></span>'+
+    '<button class="btn small ingEd" data-n="'+esc(x.name)+'">✏️ Corregir</button>'+
+    '<button class="btn small danger ingDel" data-n="'+esc(x.name)+'">🗑</button></div>').join('');
+  box.querySelectorAll('.ingEd').forEach(b=>b.addEventListener('click',()=>{
+    const nuevo=prompt('Corregir «'+b.dataset.n+'» por:',b.dataset.n);
+    if(nuevo&&nuevo.trim()&&nuevo.trim().toLowerCase()!==b.dataset.n.toLowerCase())applyIngredientChange(b.dataset.n,nuevo.trim());
+  }));
+  box.querySelectorAll('.ingDel').forEach(b=>b.addEventListener('click',()=>{
+    if(confirm('¿Borrar «'+b.dataset.n+'» de todos los platos que lo llevan?'))applyIngredientChange(b.dataset.n,'');
+  }));
+}
 function renderIngCats(){
   const list=unclassifiedIngredients();
   const box=$('#ingCatsList');
