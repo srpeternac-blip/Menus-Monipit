@@ -82,9 +82,9 @@ p.viewsub{color:var(--ink-soft);margin-bottom:20px;font-size:14px}
 /* ---------- Layout calendario ---------- */
 .calwrap{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start}
 @media(max-width:820px){.calwrap{grid-template-columns:1fr}}
-td.turcell{padding:6px 4px!important;text-align:center;vertical-align:middle!important}
-.hcell{display:block;margin:2px auto;min-width:64px;max-width:76px;padding:2px 5px;border-radius:6px;font-weight:600;font-size:10.5px;cursor:pointer;border:1px solid var(--line);background:var(--field);white-space:nowrap}
-.hcell b{font-weight:800;margin-right:3px}
+th.horcol{width:78px;text-align:center!important}
+td.turcell{padding:6px 4px!important;text-align:center;vertical-align:middle!important;border-left:1px solid var(--line-soft)}
+.hcell{display:inline-block;min-width:66px;padding:3px 6px;border-radius:6px;font-weight:600;font-size:11px;cursor:pointer;border:1px solid var(--line);background:var(--field);white-space:nowrap}
 .hcell:hover{background:var(--olive-tint)}
 .hcell.hM{background:var(--mostaza-tint);border-color:var(--mostaza)}
 .hcell.hT{background:var(--olive-tint);border-color:#C6D2A8}
@@ -178,6 +178,14 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .sugbox button:hover{background:var(--mostaza)}
 
 /* ---------- Registrar ---------- */
+#tagbox{position:absolute;z-index:150;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px rgba(35,38,25,.2);display:none;min-width:180px;overflow:hidden}
+#tagbox .tbhead{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);padding:9px 14px 4px}
+#tagbox button{display:block;width:100%;text-align:left;background:none;border:none;padding:9px 14px;font-size:14px;font-weight:500;cursor:pointer}
+#tagbox button:hover{background:var(--olive-tint)}
+#tagbox button.danger{color:var(--pimiento)}
+#tagbox button.danger:hover{background:var(--pimiento-tint)}
+#tagbox input{width:calc(100% - 28px);margin:4px 14px 10px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--field)}
+.tagdots{margin-left:6px;opacity:.4;font-weight:800}
 .regwrap{display:grid;grid-template-columns:minmax(0,640px) minmax(240px,340px);gap:20px;align-items:start}
 @media(max-width:900px){.regwrap{grid-template-columns:1fr}}
 .formcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;max-width:640px}
@@ -236,12 +244,15 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 #cellsug{position:absolute;z-index:120;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px rgba(35,38,25,.18);max-height:260px;overflow-y:auto;min-width:230px;display:none}
 #cellsug .pickitem{padding:8px 12px}
 #cellsug .special{color:var(--ink-soft);font-style:italic}
-.whoset{display:inline-flex;gap:3px;margin-left:7px;vertical-align:middle}
-.whoset button{border:none;background:none;padding:0 1px;font-weight:800;font-size:10px;color:var(--ink-soft);opacity:.3;cursor:pointer;transition:all .1s;line-height:1}
-.whoset button.on{opacity:1;font-size:14px}
-.whoset button.wP.on{color:#55632F}
-.whoset button.wM.on{color:#33586B}
-.whoset button.wR.on{color:#BF4326}
+.whobig{margin-left:8px;font-weight:800;font-size:15px;letter-spacing:.06em;vertical-align:baseline}
+.whobig .p{color:#55632F}.whobig .m{color:#33586B}.whobig .r{color:#BF4326}
+.popwho{display:flex;align-items:center;gap:6px;padding:6px 14px}
+.popwho .pnm{font-size:12px;color:var(--ink-soft);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+.popwho button{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--field);font-weight:800;font-size:12px;color:var(--ink-soft);opacity:.5;cursor:pointer}
+.popwho button.on{opacity:1;color:#fff}
+.popwho button.wP.on{background:#55632F;border-color:#55632F}
+.popwho button.wM.on{background:#33586B;border-color:#33586B}
+.popwho button.wR.on{background:#BF4326;border-color:#BF4326}
 
 #alerts{padding:10px 16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
 #alerts:empty{display:none}
@@ -323,17 +334,18 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
     <div class="row"><label>Nombre del plato</label><input type="text" id="regNombre"></div>
     <div class="row"><label>Ingredientes (separados por comas)</label><textarea id="regIng"></textarea>
       <div class="sugbox" id="regSug"></div></div>
-    <div class="row"><label>Etiquetas</label>
-      <div class="tagpick" id="regTags"></div>
-      <div class="newtag"><input type="text" id="regNewTag" placeholder="Nueva etiqueta…"><button class="btn small" id="regAddTag">Añadir</button></div>
+    <div class="row"><label>Etiquetas del plato (elige en la lista de la derecha →)</label>
+      <div class="tagpick" id="regTags" style="min-height:34px"></div>
     </div>
     <div class="foot" style="display:flex;justify-content:flex-end"><button class="btn primary" id="regGuardar">Guardar plato</button></div>
   </div>
   <div class="formcard" style="align-self:start">
-    <h3 style="font-family:var(--display);font-size:16px;margin-bottom:6px">Gestión de etiquetas</h3>
-    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">Toca una etiqueta para renombrarla o eliminarla de toda la app. Se guarda solo.</p>
+    <h3 style="font-family:var(--display);font-size:16px;margin-bottom:6px">Etiquetas</h3>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">Un toque: se añade o quita del plato. Mantener el ratón o tocar ⋯: modificar o eliminar de toda la app.</p>
     <div class="tagpick" id="tagMgr"></div>
+    <div class="newtag"><input type="text" id="regNewTag" placeholder="Nueva etiqueta…"><button class="btn small" id="regAddTag">Añadir</button></div>
   </div>
+  <div id="tagbox"></div>
   </div>
 </section>
 
@@ -565,7 +577,7 @@ function weekNumberInMonth(startStr){
 
 
 /* ---------- diccionario de ingredientes (análisis automático) ---------- */
-const APP_VERSION='v4.1';
+const APP_VERSION='v4.2';
 const DICT={
   verdura:['judia verde','judias verdes','calabacin','espinaca','pimiento','cebolla','tomate','lechuga','rucula','zanahoria','brocoli','coliflor','alcachofa','berenjena','champinon','seta','puerro','apio','pepino','acelga','calabaza','esparrago','canonigo','remolacha','guisante','col ','coles','repollo','endibia','escarola','maiz','ajo tierno','borraja','cardo','nabo','rabano','verdura'],
   legumbre:['lenteja','garbanzo','alubia','judia blanca','judia pinta','soja','haba','frijol','legumbre'],
@@ -680,7 +692,7 @@ function showView(view,push){
   const el=$('#view-'+view);if(el)el.classList.add('active');
   if(view==='biblioteca')renderLib();
   if(view==='nino')renderNino();
-  if(view==='registrar'){renderTagPick($('#regTags'),[]);renderTagMgr()}
+  if(view==='registrar')renderTagMgr();
   if(view==='ingredientes'){renderIngCats();renderIngAll();document.getElementById('ingSearch').oninput=renderIngAll}
   if(push!==false)history.pushState({v:view},'','#'+view);
 }
@@ -692,9 +704,10 @@ function syncTurnoUI(){$('#sandState').textContent=week.sandwich?'ON':'OFF';$('#
 
 
 function eatsP(c){return !c.who||!c.who.length||c.who.includes('P')}
-function whoSet(c,i,slot,ix){
+function whoBig(c){
   const act=c.who||[];
-  return '<span class="whoset">'+['P','M','R'].map(w=>'<button class="w'+w+(act.includes(w)?' on':'')+'" data-d="'+i+'" data-s="'+slot+'" data-ix="'+ix+'" data-w="'+w+'" title="'+(w==='P'?'Piti':w==='M'?'Moni':'R')+'">'+w+'</button>').join('')+'</span>'}
+  if(!act.length)return '';
+  return '<span class="whobig">'+['P','M','R'].filter(w=>act.includes(w)).map(w=>'<span class="'+w.toLowerCase()+'">'+w+'</span>').join('')+'</span>'}
 const openCells=new Set();
 
 /* ---------- celdas multi-plato ---------- */
@@ -865,7 +878,7 @@ $('#btnVaciar').addEventListener('click',()=>{if(!confirm('¿Vaciar toda la sema
 
 
 /* ---------- horarios Piti / Moni ---------- */
-const HOR_VALS=['Mañana','Tarde','Dobla','Libra','Vacaciones'];
+const HOR_VALS=['Mañana','Tarde','Dobla','Libre','Vacaciones'];
 const HOR_ANCHOR='2026-07-20'; // semana en la que Piti=Mañana, Moni=Tarde
 function weekParity(dateObj){
   const mon=mondayOf(isoDate(dateObj));
@@ -877,9 +890,9 @@ function horDefault(dateObj,person){
   const dow=(dateObj.getDay()+6)%7; // 0=L … 5=S 6=D
   const par=weekParity(dateObj);
   const turnoSemana=(person==='P')?(par===0?'Mañana':'Tarde'):(par===0?'Tarde':'Mañana');
-  if(person==='P')return dow>=5?'Libra':turnoSemana;
+  if(person==='P')return dow>=5?'Libre':turnoSemana;
   // Moni: sábado = su turno de la semana, domingo = Libra
-  if(dow===6)return 'Libra';
+  if(dow===6)return 'Libre';
   return turnoSemana;
 }
 function horValue(dateObj,person){
@@ -890,17 +903,25 @@ function horValue(dateObj,person){
 function bindHorarioCells(tbl){
   tbl.querySelectorAll('.hcell').forEach(c=>c.addEventListener('click',e=>{
     e.stopPropagation();
-    const f=c.dataset.f,p=c.dataset.p;
-    const cur=c.dataset.v;
-    const next=HOR_VALS[(HOR_VALS.indexOf(cur)+1)%HOR_VALS.length];
-    if(!state.horarios)state.horarios={};
-    if(!state.horarios[f])state.horarios[f]={};
-    const dObj=new Date(f+'T12:00:00');
-    if(next===horDefault(dObj,p)){delete state.horarios[f][p];if(!Object.keys(state.horarios[f]).length)delete state.horarios[f]}
-    else state.horarios[f][p]=next;
-    saveLocal();
-    bg(api('saveHorarios',{horarios:state.horarios}));
-    renderTables();
+    const f=c.dataset.f,p=c.dataset.p,cur=c.dataset.v;
+    pop.innerHTML='<div class="poplabel">'+(p==='P'?'Piti':'Moni')+' · '+f.slice(8,10)+'/'+f.slice(5,7)+'</div>'+
+      HOR_VALS.map(v=>'<button data-v="'+v+'"'+(v===cur?' style="font-weight:800;background:var(--olive-tint)"':'')+'>'+v+'</button>').join('');
+    const r=c.getBoundingClientRect();
+    pop.style.display='block';
+    pop.style.left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-160)+'px';
+    pop.style.top=(r.bottom+window.scrollY+4)+'px';
+    pop.querySelectorAll('button[data-v]').forEach(b=>b.addEventListener('click',ev=>{
+      ev.stopPropagation();
+      const next=b.dataset.v;
+      if(!state.horarios)state.horarios={};
+      if(!state.horarios[f])state.horarios[f]={};
+      const dObj=new Date(f+'T12:00:00');
+      if(next===horDefault(dObj,p)){delete state.horarios[f][p];if(!Object.keys(state.horarios[f]).length)delete state.horarios[f]}
+      else state.horarios[f][p]=next;
+      saveLocal();
+      bg(api('saveHorarios',{horarios:state.horarios}));
+      closePop();renderTables();
+    }));
   }));
 }
 
@@ -917,26 +938,26 @@ function renderTables(){
   renderBalance();
 }
 function renderBlock(tbl,dayIdxs,dates,slots){
-  let html='<thead><tr><th class="daycol"></th><th style="width:88px;text-align:center">Turnos</th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+'</tr></thead><tbody>';
+  let html='<thead><tr><th class="daycol"></th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+'<th class="horcol">Moni</th><th class="horcol">Piti</th></tr></thead><tbody>';
   dayIdxs.forEach(i=>{
     const kid=state.nino[isoDate(dates[i])]||'';
     html+='<tr><td class="day'+(i>=5?' wk':'')+'">'+DIA_L[i]+'<small>'+fmtDate(dates[i])+'</small></td>';
-    html+='<td class="turcell">'+['P','M'].map(per=>{
-      const v=horValue(dates[i],per);
-      return '<span class="hcell h'+v.charAt(0)+'" data-f="'+isoDate(dates[i])+'" data-p="'+per+'" data-v="'+v+'" title="'+(per==='P'?'Piti':'Moni')+'"><b>'+per+'</b>'+v+'</span>';
-    }).join('')+'</td>';
     slots.forEach(slot=>{
       const arr=cellArr(i,slot);
       const warn=(slot==='cena'&&i<5&&arr.some(c=>overlapsNino(c,kid)))?' nino-warn':'';
       if(arr.length){
         const openx=openCells.has(i+'-'+slot)?' openx':'';
         html+='<td><div class="cell'+warn+openx+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0">'+
-          arr.map((c,ix)=>'<div class="nm">'+esc(c.nombre)+whoSet(c,i,slot,ix)+'</div>').join('')+
+          arr.map(c=>'<div class="nm">'+esc(c.nombre)+whoBig(c)+'</div>').join('')+
           '<div class="det">'+arr.map(c=>'<div class="ing">'+esc(c.ingredientes||'(sin ingredientes anotados)')+'</div>').join('')+'</div>'+
           '<button class="cellmenu" data-d="'+i+'" data-s="'+slot+'" title="Acciones">⋮</button></div></td>';
       }else{
         html+='<td><div class="cell empty" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">—</div></div></td>';
       }
+    });
+    ['M','P'].forEach(per=>{
+      const v=horValue(dates[i],per);
+      html+='<td class="turcell"><span class="hcell h'+v.charAt(0)+'" data-f="'+isoDate(dates[i])+'" data-p="'+per+'" data-v="'+v+'">'+v+'</span></td>';
     });
     html+='</tr>';
   });
@@ -961,15 +982,7 @@ function renderBlock(tbl,dayIdxs,dates,slots){
     openPop(b.closest('.cell'),e);
   }));
   bindHorarioCells(tbl);
-  tbl.querySelectorAll('.whoset button').forEach(b=>b.addEventListener('click',e=>{
-    e.stopPropagation();
-    const d=+b.dataset.d,s=b.dataset.s,ix=+b.dataset.ix,w=b.dataset.w;
-    const dish=cellArr(d,s)[ix];if(!dish)return;
-    let who=dish.who?dish.who.slice():[];
-    if(who.includes(w))who=who.filter(x=>x!==w);else who.push(w);
-    if(!who.length||who.length===3)delete dish.who;else dish.who=who;
-    dirty=true;renderTables();
-  }));
+
 }
 function renderBalance(){
   const pe=countCat('pescado'),le=countCat('legumbre'),ve=countCat('verdura');
@@ -1069,6 +1082,7 @@ function openPop(cell,e){
   pop.innerHTML='<div class="poplabel">'+DIAS[currentCell.d]+' · '+slotLabel(currentCell.s)+'</div>'+
     '<button id="ppAnadir">➕ Añadir</button>'+
     '<button id="ppCambiar">🔄 Cambiar</button>'+
+    (arr.length?'<button id="ppComensal">👤 Comensal</button>':'')+
     (arr.length?'<button id="ppEliminar" class="danger">✖ Eliminar</button>':'')+
     '<button id="ppEspecial">✏️ Especial</button>';
   const r=cell.getBoundingClientRect();
@@ -1078,8 +1092,35 @@ function openPop(cell,e){
   $('#ppAnadir').addEventListener('click',()=>{closePop();pickAction='append';openPick()});
   $('#ppCambiar').addEventListener('click',()=>{closePop();pickAction='replace';openPick()});
   $('#ppEspecial').addEventListener('click',()=>{closePop();openMod()});
+  const cm=$('#ppComensal');if(cm)cm.addEventListener('click',e2=>{e2.stopPropagation();showComensal(cell)});
   const v=$('#ppEliminar');if(v)v.addEventListener('click',()=>{if(!week.days[currentCell.d])week.days[currentCell.d]={};week.days[currentCell.d][currentCell.s]=[];dirty=true;closePop();renderTables()});
 }
+
+function showComensal(cell){
+  const d=currentCell.d,s=currentCell.s;
+  const arr=cellArr(d,s);
+  function paint(){
+    pop.innerHTML='<div class="poplabel">Comensal · '+DIAS[d]+' '+slotLabel(s)+'</div>'+
+      arr.map((c,ix)=>{
+        const act=c.who||[];
+        return '<div class="popwho"><span class="pnm">'+esc(c.nombre)+'</span>'+
+          ['P','M','R'].map(w=>'<button class="w'+w+(act.includes(w)?' on':'')+'" data-ix="'+ix+'" data-w="'+w+'">'+w+'</button>').join('')+'</div>';
+      }).join('')+
+      '<button id="cmListo" style="font-weight:700">Listo</button>';
+    pop.querySelectorAll('.popwho button').forEach(b=>b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const dish=arr[+b.dataset.ix];
+      let who=dish.who?dish.who.slice():[];
+      const w=b.dataset.w;
+      if(who.includes(w))who=who.filter(x=>x!==w);else who.push(w);
+      if(!who.length)delete dish.who;else dish.who=who;
+      dirty=true;paint();
+    }));
+    pop.querySelector('#cmListo').addEventListener('click',e=>{e.stopPropagation();closePop();renderTables()});
+  }
+  paint();
+}
+
 function closePop(){pop.style.display='none'}
 document.addEventListener('click',e=>{if(!pop.contains(e.target))closePop()});
 
@@ -1243,51 +1284,90 @@ function confirmNewIngredients(text){
 }
 
 /* ---------- registrar ---------- */
-$('#regAddTag').addEventListener('click',()=>addTagFlow($('#regNewTag'),$('#regTags')));
+$('#regAddTag').addEventListener('click',()=>{
+  const t=norm($('#regNewTag').value).trim().replace(/\s+/g,'-');
+  if(!t)return;
+  if(!state.tags.includes(t)){state.tags.push(t);saveLocal();bg(api('saveTags',{tags:state.tags}))}
+  if(!tagSel.includes(t))tagSel.push(t);
+  $('#regNewTag').value='';renderTagMgr();
+});
 $('#regGuardar').addEventListener('click',()=>{
   const nombre=$('#regNombre').value.trim();
   if(!nombre){toast('Ponle nombre al plato');return}
   const ings=canonizeIngredients($('#regIng').value);
   if(!confirmNewIngredients(ings))return;
-  const p={id:uid(),nombre,ingredientes:ings,etiquetas:pickedTags($('#regTags'))};
+  const p={id:uid(),nombre,ingredientes:ings,etiquetas:tagSel.slice()};
   state.platos.push(p);saveLocal();
   bg(api('savePlato',{plato:p}));
-  $('#regNombre').value='';$('#regIng').value='';$('#regSug').innerHTML='';renderTagPick($('#regTags'),[]);updateIngDot();
+  $('#regNombre').value='';$('#regIng').value='';$('#regSug').innerHTML='';tagSel=[];renderTagMgr();updateIngDot();
   toast('«'+nombre+'» guardado en la biblioteca ✔');
 });
 
 
 /* ---------- gestión de etiquetas ---------- */
-const CORE_TAGS=['comida','cena','sandwich','bocata'];
+const tagbox=()=>document.getElementById('tagbox');
+let tagSel=[]; // etiquetas seleccionadas para el plato en registro
+function closeTagbox(){const t=tagbox();if(t){t.style.display='none';t.innerHTML=''}}
 function renderTagMgr(){
   const box=document.getElementById('tagMgr');if(!box)return;
-  box.innerHTML=sortedTags().map(t=>'<button type="button" class="tp" data-t="'+esc(t)+'">'+esc(t)+(CORE_TAGS.includes(t)?' \ud83d\udd12':'')+'</button>').join('');
-  box.querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>{
+  box.innerHTML=sortedTags().map(t=>'<button type="button" class="tp'+(tagSel.includes(t)?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'<span class="tagdots" data-t="'+esc(t)+'">⋯</span></button>').join('');
+  syncRegTags();
+  box.querySelectorAll('.tp').forEach(b=>b.addEventListener('click',e=>{
     const t=b.dataset.t;
-    if(CORE_TAGS.includes(t)){toast('\u00ab'+t+'\u00bb es una etiqueta b\u00e1sica de la app, no se puede tocar');return}
-    const usos=state.platos.filter(p=>p.etiquetas.includes(t)).length;
-    const accion=prompt('Etiqueta \u00ab'+t+'\u00bb ('+usos+' plato(s)).\n\nEscribe un NOMBRE NUEVO para renombrarla,\no escribe BORRAR para eliminarla:',t);
-    if(accion===null)return;
-    const val=accion.trim();
-    if(!val||val===t)return;
+    if(e.target.classList.contains('tagdots')){openTagbox(b,t);return}
+    if(tagSel.includes(t))tagSel=tagSel.filter(x=>x!==t);else tagSel.push(t);
+    renderTagMgr();
+  }));
+}
+function syncRegTags(){
+  const rt=document.getElementById('regTags');if(!rt)return;
+  rt.innerHTML=tagSel.length?tagSel.map(t=>'<button type="button" class="tp on" data-t="'+esc(t)+'">'+esc(t)+' ×</button>').join(''):'<span style="font-size:12.5px;color:var(--ink-soft);align-self:center">ninguna todavía</span>';
+  rt.querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>{tagSel=tagSel.filter(x=>x!==b.dataset.t);renderTagMgr()}));
+}
+function openTagbox(chip,t){
+  const box=tagbox();
+  const usos=state.platos.filter(p=>p.etiquetas.includes(t)).length;
+  box.innerHTML='<div class="tbhead">«'+esc(t)+'» · '+usos+' plato'+(usos===1?'':'s')+'</div>'+
+    '<button id="tbMod">✏️ Modificar</button>'+
+    '<button id="tbDel" class="danger">🗑 Eliminar</button>'+
+    '<button id="tbCancel">Cancelar</button>';
+  const r=chip.getBoundingClientRect();
+  box.style.display='block';
+  box.style.left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-200)+'px';
+  box.style.top=(r.bottom+window.scrollY+4)+'px';
+  document.getElementById('tbCancel').addEventListener('click',closeTagbox);
+  document.getElementById('tbDel').addEventListener('click',()=>{
+    if(!confirm('¿Eliminar «'+t+'» de toda la app? Se quitará de '+usos+' plato(s).'))return;
     const changed=[];
-    if(norm(val)==='borrar'){
-      state.tags=state.tags.filter(x=>x!==t);
-      state.platos.forEach(p=>{if(p.etiquetas.includes(t)){p.etiquetas=p.etiquetas.filter(x=>x!==t);changed.push(p)}});
-      toast('Etiqueta \u00ab'+t+'\u00bb eliminada de '+changed.length+' plato(s)');
-    }else{
-      const nt=norm(val).replace(/\s+/g,'-');
+    state.tags=state.tags.filter(x=>x!==t);
+    state.platos.forEach(p=>{if(p.etiquetas.includes(t)){p.etiquetas=p.etiquetas.filter(x=>x!==t);changed.push(p)}});
+    tagSel=tagSel.filter(x=>x!==t);
+    saveLocal();bg(api('saveTags',{tags:state.tags}));changed.forEach(p=>bg(api('savePlato',{plato:p})));
+    closeTagbox();renderTagMgr();renderLib();renderTables();
+    toast('«'+t+'» eliminada de '+changed.length+' plato(s)');
+  });
+  document.getElementById('tbMod').addEventListener('click',()=>{
+    box.innerHTML='<div class="tbhead">Renombrar «'+esc(t)+'»</div><input type="text" id="tbInput" value="'+esc(t)+'"><button id="tbSave" style="font-weight:700">Guardar</button><button id="tbCancel2">Cancelar</button>';
+    const inp=document.getElementById('tbInput');inp.focus();inp.select();
+    document.getElementById('tbCancel2').addEventListener('click',closeTagbox);
+    function doSave(){
+      const nt=norm(inp.value).trim().replace(/\s+/g,'-');
+      if(!nt||nt===t){closeTagbox();return}
+      const changed=[];
       if(!state.tags.includes(nt))state.tags.push(nt);
       state.tags=state.tags.filter(x=>x!==t);
       state.platos.forEach(p=>{if(p.etiquetas.includes(t)){p.etiquetas=[...new Set(p.etiquetas.map(x=>x===t?nt:x))];changed.push(p)}});
-      toast('\u00ab'+t+'\u00bb \u2192 \u00ab'+nt+'\u00bb en '+changed.length+' plato(s)');
+      tagSel=tagSel.map(x=>x===t?nt:x);
+      saveLocal();bg(api('saveTags',{tags:state.tags}));changed.forEach(p=>bg(api('savePlato',{plato:p})));
+      closeTagbox();renderTagMgr();renderLib();renderTables();
+      toast('«'+t+'» → «'+nt+'» en '+changed.length+' plato(s)');
     }
-    saveLocal();
-    bg(api('saveTags',{tags:state.tags}));
-    changed.forEach(p=>bg(api('savePlato',{plato:p})));
-    renderTagMgr();renderLib();renderTables();renderTagPick($('#regTags'),pickedTags($('#regTags')));
-  }));
+    document.getElementById('tbSave').addEventListener('click',doSave);
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')doSave();if(e.key==='Escape')closeTagbox()});
+  });
 }
+document.addEventListener('click',e=>{const b=tagbox();if(b&&b.style.display==='block'&&!b.contains(e.target)&&!e.target.classList.contains('tagdots'))closeTagbox()});
+
 
 /* ---------- biblioteca ---------- */
 let libFilter=null;
@@ -1543,7 +1623,7 @@ $('#appVersion').textContent=APP_VERSION;
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 
 /* ---------- arranque ---------- */
-function renderAll(){renderTables();renderMonths();renderLib();renderNino();renderTagPick($('#regTags'),[]);renderTagMgr();updateIngDot()}
+function renderAll(){renderTables();renderMonths();renderLib();renderNino();renderTagMgr();updateIngDot()}
 (async function init(){
   applyTheme(localStorage.getItem(LS_THEME)||'light');
   applyFont(localStorage.getItem(LS_FONT)||'1');
