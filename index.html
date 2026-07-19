@@ -297,6 +297,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
   <div class="genbar">
     <button class="btn primary" id="btnGenerar">⚡ Generar menú</button>
     <button class="btn" id="btnSand">🥪 Sándwich: <b id="sandState">ON</b></button>
+    <button class="btn" id="btnHor" title="Mostrar u ocultar los turnos de trabajo">🕐 Horarios</button>
     <div class="spacer"></div>
     <button class="btn small" id="btnVaciar">Vaciar semana</button>
     <button class="btn primary" id="btnGuardarSemana">💾 Guardar semana</button>
@@ -577,19 +578,19 @@ function weekNumberInMonth(startStr){
 
 
 /* ---------- diccionario de ingredientes (análisis automático) ---------- */
-const APP_VERSION='v4.2';
+const APP_VERSION='v4.3';
 const DICT={
   verdura:['judia verde','judias verdes','calabacin','espinaca','pimiento','cebolla','tomate','lechuga','rucula','zanahoria','brocoli','coliflor','alcachofa','berenjena','champinon','seta','puerro','apio','pepino','acelga','calabaza','esparrago','canonigo','remolacha','guisante','col ','coles','repollo','endibia','escarola','maiz','ajo tierno','borraja','cardo','nabo','rabano','verdura'],
   legumbre:['lenteja','garbanzo','alubia','judia blanca','judia pinta','soja','haba','frijol','legumbre'],
   pescado:['sardina','caballa','melva','atun','bonito','salmon','boqueron','anchoa','merluza','bacalao','abadejo','dorada','lubina','trucha','emperador','pez espada','rape','rodaballo','gamba','langostino','mejillon','calamar','sepia','pulpo','marisco','pescado'],
-  proteina:['pollo','pavo','huevo','tortilla francesa','ternera','cerdo','lomo','magro','conejo','solomillo','pechuga','muslo','carne picada','jamon','yogur','queso','atun','salmon','sardina','caballa','melva','merluza','bacalao','lenteja','garbanzo','alubia','soja','huevos','tofu','proteina'],
+  proteina:['pollo','pavo','huevo','tortilla francesa','ternera','cerdo','lomo','magro','conejo','solomillo','pechuga','muslo','carne picada','jamon','yogur','queso','atun','salmon','sardina','caballa','melva','merluza','bacalao','lenteja','garbanzo','alubia','soja','huevos','tofu','proteina','lacon','parmesano','mozzarella','manchego','cheddar','emmental','gouda'],
   carbohidrato:['arroz','pasta','pan','patata','quinoa','cuscus','gnochi','gnocchi','noqui','fajita','harina','avena','picatoste','cereal','cracker','tortita'],
   grasasaludable:['aceituna','aguacate','aove','aceite de oliva','nuez','nueces','macadamia','cacahuete','almendra','anacardo','pistacho','avellana','pipas','semillas','tahini','sesamo'],
-  especia:['comino','curry','pimenton','oregano','perejil','laurel','ajo','jengibre','especia','canela','tomillo','romero','albahaca','cilantro','azafran','clavo','nuez moscada','eneldo','cayena','guindilla'],
+  especia:['comino','curry','pimenton','oregano','perejil','laurel','ajo','jengibre','especia','canela','tomillo','romero','albahaca','cilantro','azafran','clavo','nuez moscada','eneldo','cayena','guindilla','pimienta'],
   procesado:['bacon','beicon','chorizo','salchichon','fuet','mortadela','salchicha','embutido','panceta','mayonesa','nata','mantequilla','bolleria','pizza','frito','fritura','rebozado','empanado','philadelphia','queso fundido','sobrasada','patatas fritas','hojaldre','precocinado']
 };
 const CAT_LABELS={verdura:'Verdura',legumbre:'Legumbre',pescado:'Pescado',proteina:'Proteína',grasasaludable:'Grasa saludable',carbohidrato:'Carbohidrato',especia:'Especia',procesado:'Procesado/grasa',ignorar:'Ignorar'};
-const NEUTRAL=['sal','pimienta','limon','vinagre','agua','caldo','tomate frito','azucar','miel'];
+const NEUTRAL=['sal','limon','vinagre','agua','caldo','tomate frito','azucar','miel'];
 function isNeutral(n){return NEUTRAL.some(kw=>new RegExp('\\b'+kw).test(n))}
 function classifyIng(ing){
   const n=norm(ing).trim();
@@ -700,6 +701,7 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
 
 /* ---------- turno ---------- */
 $('#btnSand').addEventListener('click',()=>{week.sandwich=!week.sandwich;dirty=true;syncTurnoUI();renderTables()});
+$('#btnHor').addEventListener('click',()=>{horVisible=!horVisible;localStorage.setItem(LS_HOR,horVisible?'1':'0');syncHorBtn();renderTables()});
 function syncTurnoUI(){$('#sandState').textContent=week.sandwich?'ON':'OFF';$('#btnSand').style.background=week.sandwich?'var(--mostaza-tint)':'var(--card)'}
 
 
@@ -900,6 +902,9 @@ function horValue(dateObj,person){
   if(ov&&ov[person])return ov[person];
   return horDefault(dateObj,person);
 }
+const LS_HOR='menuPitiHorVisible';
+let horVisible=localStorage.getItem(LS_HOR)!=='0';
+function syncHorBtn(){const b=document.getElementById('btnHor');if(b)b.style.background=horVisible?'var(--olive-tint)':'var(--card)'}
 function bindHorarioCells(tbl){
   tbl.querySelectorAll('.hcell').forEach(c=>c.addEventListener('click',e=>{
     e.stopPropagation();
@@ -938,7 +943,7 @@ function renderTables(){
   renderBalance();
 }
 function renderBlock(tbl,dayIdxs,dates,slots){
-  let html='<thead><tr><th class="daycol"></th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+'<th class="horcol">Moni</th><th class="horcol">Piti</th></tr></thead><tbody>';
+  let html='<thead><tr><th class="daycol"></th>'+slots.map(s=>'<th>'+slotLabel(s)+'</th>').join('')+(horVisible?'<th class="horcol">Moni</th><th class="horcol">Piti</th>':'')+'</tr></thead><tbody>';
   dayIdxs.forEach(i=>{
     const kid=state.nino[isoDate(dates[i])]||'';
     html+='<tr><td class="day'+(i>=5?' wk':'')+'">'+DIA_L[i]+'<small>'+fmtDate(dates[i])+'</small></td>';
@@ -955,7 +960,7 @@ function renderBlock(tbl,dayIdxs,dates,slots){
         html+='<td><div class="cell empty" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">—</div></div></td>';
       }
     });
-    ['M','P'].forEach(per=>{
+    if(horVisible)['M','P'].forEach(per=>{
       const v=horValue(dates[i],per);
       html+='<td class="turcell"><span class="hcell h'+v.charAt(0)+'" data-f="'+isoDate(dates[i])+'" data-p="'+per+'" data-v="'+v+'">'+v+'</span></td>';
     });
@@ -1646,6 +1651,7 @@ function renderAll(){renderTables();renderMonths();renderLib();renderNino();rend
   seed();
   loadWeek(week.start);
   renderAll();
+  syncHorBtn();
 })();
 </script>
 </body>
