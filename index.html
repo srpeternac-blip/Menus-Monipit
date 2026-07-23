@@ -118,7 +118,7 @@ table.menu tr:last-child td{border-bottom:none}
 td.day{font-family:var(--display);font-weight:800;font-size:26px;text-align:center;color:var(--olive);padding:12px 0!important;user-select:none}
 td.day.wk{color:var(--mostaza)}
 td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-soft)}
-.cell{min-height:56px;padding:11px 30px 11px 13px;position:relative;border-left:1px solid var(--line-soft);transition:background .12s;cursor:pointer}
+.cell{min-height:56px;padding:11px 68px 11px 13px;position:relative;border-left:1px solid var(--line-soft);transition:background .12s;cursor:pointer}
 .cell:hover{background:var(--olive-tint)}
 .cell .nm{font-weight:600;font-size:14.5px;line-height:1.3}
 .cell.empty .nm{color:#B9B4A3;font-weight:500;font-style:italic}
@@ -127,9 +127,19 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 .cell.openx .det{display:block}
 .cell .det .ing{font-size:12.5px;color:var(--ink-soft);line-height:1.35}
 .cell .det .tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
-.cellmenu{position:absolute;top:6px;right:6px;width:22px;height:22px;border:none;background:transparent;border-radius:6px;color:var(--ink-soft);font-weight:700;font-size:15px;line-height:1;opacity:.35}
-.cell:hover .cellmenu{opacity:1}
-.cellmenu:hover{background:var(--card)}
+.cellacts{position:absolute;top:5px;right:5px;display:flex;gap:1px}
+.cellacts button{width:21px;height:21px;border:none;background:transparent;border-radius:6px;color:var(--ink-soft);font-weight:700;font-size:13px;line-height:1;opacity:.3;padding:0;transition:opacity .12s}
+.cellacts button.cellmenu{font-size:15px}
+.cell:hover .cellacts button{opacity:.75}
+.cell.empty .cellacts button{opacity:.5}
+.cell.empty{padding-right:48px}
+.cellacts button:hover{opacity:1!important;background:var(--card)}
+.cellacts button.cellDel:hover{background:var(--pimiento-tint);color:var(--pimiento)}
+.cell.dragging{opacity:.4}
+.cell.dragover{background:var(--mostaza-tint);box-shadow:inset 0 0 0 2px var(--mostaza)}
+.cell[draggable=true]{cursor:grab}
+.cell[draggable=true]:active{cursor:grabbing}
+@media(max-width:720px){.cellacts button.quick{display:none}}
 
 .sheet-foot{display:flex;gap:10px;align-items:center;padding:13px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
 .balance{display:flex;gap:8px;flex-wrap:wrap;margin-right:auto}
@@ -265,7 +275,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
 
 @media(max-width:720px){
   td.day{font-size:19px}
-  .cell{padding:9px 26px 9px 9px;min-height:48px}
+  .cell{padding:9px 28px 9px 9px;min-height:48px}
   .cell .nm{font-size:13px}
   table.menu th{font-size:10.5px;padding:8px 8px}
   table.menu th.daycol{width:42px}
@@ -435,7 +445,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
     <h3>Instrucciones</h3>
     <details><summary style="cursor:pointer;font-weight:600;font-size:14px;padding:4px 0">Cómo funciona la app</summary>
     <div style="font-size:13.5px;color:var(--ink-soft);line-height:1.55;padding-top:8px">
-    <p><b>Menú semana.</b> Activa o no 🥪 Sándwich (añade esa columna entre comida y cena) y pulsa Generar: la app monta la semana respetando el Menú R, sin repetir la semana anterior, con pescado y legumbre mínimo 2 y bocata el viernes. Arriba: bloque del fin de semana (el de la semana que acaba). Navega con las flechas o desde el historial de meses. Cada casilla admite varios platos (principal + acompañamiento): con ⋮ puedes ➕ Añadir, Cambiar, Eliminar o escribir algo Especial ("ayuno", "cena fuera"…). Pincha la casilla para ver los ingredientes y marcar quién come cada plato (P, M, R; sin marca = todos): los contadores solo cuentan los platos de P. A la derecha, el panel <b>Horarios</b> de Piti y Moni: toca una casilla para rotar el turno (Mañana → Tarde → Dobla → Libra → Vacaciones), se guarda solo y por defecto trae la alternancia semanal. Al terminar el menú: Guardar semana.</p>
+    <p><b>Menú semana.</b> Activa o no 🥪 Sándwich (añade esa columna entre comida y cena) y pulsa Generar: la app monta la semana respetando el Menú R, sin repetir la semana anterior, con pescado y legumbre mínimo 2 y bocata el viernes. Arriba: bloque del fin de semana (el de la semana que acaba). Navega con las flechas o desde el historial de meses. Cada casilla admite varios platos (principal + acompañamiento): con ⋮ puedes ➕ Añadir, Cambiar, Eliminar o escribir algo Especial ("ayuno", "cena fuera"…). Arrastra una casilla sobre otra para intercambiar sus platos (en móvil, mantén pulsado y arrastra). Cada casilla tiene ↻ para generar otro plato distinto y ✕ para vaciarla. Pincha la casilla para ver los ingredientes y marcar quién come cada plato (P, M, R; sin marca = todos): los contadores solo cuentan los platos de P. A la derecha, el panel <b>Horarios</b> de Piti y Moni: toca una casilla para rotar el turno (Mañana → Tarde → Dobla → Libra → Vacaciones), se guarda solo y por defecto trae la alternancia semanal. Al terminar el menú: Guardar semana.</p>
     <p><b>Menú R.</b> Pega su menú del cole en formato DD/MM: comida. Las cenas de ese día evitarán repetirlo (rayita roja si chocan).</p>
     <p><b>Biblioteca.</b> Todos tus platos, con buscador (por nombre o ingrediente) y filtros por etiqueta. Pincha para ver, edita desde dentro.</p>
     <p><b>Registrar comida.</b> Alta de platos: nombre, ingredientes separados por comas (con autocompletado) y etiquetas de hueco (comida, cena, sandwich, bocata, finde…).</p>
@@ -465,6 +475,7 @@ td.day small{display:block;font-family:var(--body);font-weight:500;font-size:11p
   <div class="modal">
     <h3 id="pickTitle">Elegir plato</h3>
     <input type="search" id="pickSearch" placeholder="Buscar por nombre o ingrediente…">
+    <div class="filters" id="pickFilters" style="margin-top:10px"></div>
     <div class="picklist" id="pickList"></div>
     <div class="foot"><button class="btn" id="pickCerrar">Cancelar</button></div>
   </div>
@@ -578,7 +589,7 @@ function weekNumberInMonth(startStr){
 
 
 /* ---------- diccionario de ingredientes (análisis automático) ---------- */
-const APP_VERSION='v4.3';
+const APP_VERSION='v4.5';
 const DICT={
   verdura:['judia verde','judias verdes','calabacin','espinaca','pimiento','cebolla','tomate','lechuga','rucula','zanahoria','brocoli','coliflor','alcachofa','berenjena','champinon','seta','puerro','apio','pepino','acelga','calabaza','esparrago','canonigo','remolacha','guisante','col ','coles','repollo','endibia','escarola','maiz','ajo tierno','borraja','cardo','nabo','rabano','verdura'],
   legumbre:['lenteja','garbanzo','alubia','judia blanca','judia pinta','soja','haba','frijol','legumbre'],
@@ -952,12 +963,20 @@ function renderBlock(tbl,dayIdxs,dates,slots){
       const warn=(slot==='cena'&&i<5&&arr.some(c=>overlapsNino(c,kid)))?' nino-warn':'';
       if(arr.length){
         const openx=openCells.has(i+'-'+slot)?' openx':'';
-        html+='<td><div class="cell'+warn+openx+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0">'+
+        html+='<td><div class="cell'+warn+openx+'" data-d="'+i+'" data-s="'+slot+'" tabindex="0" draggable="true">'+
           arr.map(c=>'<div class="nm">'+esc(c.nombre)+whoBig(c)+'</div>').join('')+
           '<div class="det">'+arr.map(c=>'<div class="ing">'+esc(c.ingredientes||'(sin ingredientes anotados)')+'</div>').join('')+'</div>'+
-          '<button class="cellmenu" data-d="'+i+'" data-s="'+slot+'" title="Acciones">⋮</button></div></td>';
+          '<div class="cellacts">'+
+            '<button class="quick cellRegen" data-d="'+i+'" data-s="'+slot+'" title="Generar otro plato para esta casilla">↻</button>'+
+            '<button class="quick cellDel" data-d="'+i+'" data-s="'+slot+'" title="Vaciar esta casilla">✕</button>'+
+            '<button class="cellmenu" data-d="'+i+'" data-s="'+slot+'" title="Acciones">⋮</button>'+
+          '</div></div></td>';
       }else{
-        html+='<td><div class="cell empty" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">—</div></div></td>';
+        html+='<td><div class="cell empty" data-d="'+i+'" data-s="'+slot+'" tabindex="0"><div class="nm">—</div>'+
+          '<div class="cellacts">'+
+            '<button class="quick cellRegen" data-d="'+i+'" data-s="'+slot+'" title="Generar un plato para esta casilla">↻</button>'+
+            '<button class="cellmenu" data-d="'+i+'" data-s="'+slot+'" title="Acciones">⋮</button>'+
+          '</div></div></td>';
       }
     });
     if(horVisible)['M','P'].forEach(per=>{
@@ -970,7 +989,7 @@ function renderBlock(tbl,dayIdxs,dates,slots){
   tbl.innerHTML=html;
   tbl.querySelectorAll('.cell').forEach(c=>{
     c.addEventListener('click',e=>{
-      if(e.target.classList.contains('cellmenu'))return;
+      if(e.target.closest('.cellacts'))return;
       const d=+c.dataset.d,s=c.dataset.s;
       currentCell={d,s};
       if(cellArr(d,s).length){
@@ -986,9 +1005,166 @@ function renderBlock(tbl,dayIdxs,dates,slots){
     currentCell={d:+b.dataset.d,s:b.dataset.s};
     openPop(b.closest('.cell'),e);
   }));
+  tbl.querySelectorAll('.cellRegen').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    regenCell(+b.dataset.d,b.dataset.s);
+  }));
+  tbl.querySelectorAll('.cellDel').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const d=+b.dataset.d,s=b.dataset.s;
+    if(!week.days[d])week.days[d]={};
+    week.days[d][s]=[];
+    openCells.delete(d+'-'+s);
+    dirty=true;renderTables();
+  }));
+  bindDrag(tbl);
   bindHorarioCells(tbl);
 
 }
+/* ---------- arrastrar para intercambiar casillas ---------- */
+let dragSrc=null, touchDrag=null, touchTimer=null;
+function swapCells(a,b){
+  if(!a||!b||(a.d===b.d&&a.s===b.s))return;
+  if(!week.days[a.d])week.days[a.d]={};
+  if(!week.days[b.d])week.days[b.d]={};
+  const va=cellArr(a.d,a.s), vb=cellArr(b.d,b.s);
+  week.days[a.d][a.s]=vb;
+  week.days[b.d][b.s]=va;
+  openCells.delete(a.d+'-'+a.s);openCells.delete(b.d+'-'+b.s);
+  dirty=true;renderTables();
+  toast('Platos intercambiados');
+}
+function clearDragMarks(){document.querySelectorAll('.cell.dragover,.cell.dragging').forEach(x=>x.classList.remove('dragover','dragging'))}
+function bindDrag(tbl){
+  tbl.querySelectorAll('.cell').forEach(c=>{
+    c.addEventListener('dragstart',e=>{
+      dragSrc={d:+c.dataset.d,s:c.dataset.s};
+      c.classList.add('dragging');
+      try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain','x')}catch(err){}
+    });
+    c.addEventListener('dragend',()=>{dragSrc=null;clearDragMarks()});
+    c.addEventListener('dragover',e=>{
+      if(!dragSrc)return;
+      e.preventDefault();
+      try{e.dataTransfer.dropEffect='move'}catch(err){}
+      if(!(dragSrc.d===+c.dataset.d&&dragSrc.s===c.dataset.s))c.classList.add('dragover');
+    });
+    c.addEventListener('dragleave',()=>c.classList.remove('dragover'));
+    c.addEventListener('drop',e=>{
+      e.preventDefault();
+      const tgt={d:+c.dataset.d,s:c.dataset.s};
+      const src=dragSrc;dragSrc=null;clearDragMarks();
+      swapCells(src,tgt);
+    });
+    /* táctil: mantener pulsado ~400 ms para coger el plato */
+    c.addEventListener('touchstart',e=>{
+      if(e.target.closest('.cellacts')||e.target.closest('.hcell'))return;
+      const t=e.touches[0];
+      touchTimer=setTimeout(()=>{
+        touchDrag={d:+c.dataset.d,s:c.dataset.s,el:c};
+        c.classList.add('dragging');
+        if(navigator.vibrate)navigator.vibrate(30);
+      },400);
+      c._tp={x:t.clientX,y:t.clientY};
+    },{passive:true});
+    c.addEventListener('touchmove',e=>{
+      const t=e.touches[0];
+      if(!touchDrag){
+        if(c._tp&&(Math.abs(t.clientX-c._tp.x)>10||Math.abs(t.clientY-c._tp.y)>10))clearTimeout(touchTimer);
+        return;
+      }
+      e.preventDefault();
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const cell=el&&el.closest?el.closest('.cell'):null;
+      document.querySelectorAll('.cell.dragover').forEach(x=>x.classList.remove('dragover'));
+      if(cell&&cell!==touchDrag.el)cell.classList.add('dragover');
+    },{passive:false});
+    c.addEventListener('touchend',e=>{
+      clearTimeout(touchTimer);
+      if(!touchDrag)return;
+      const t=e.changedTouches[0];
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const cell=el&&el.closest?el.closest('.cell'):null;
+      const src=touchDrag;touchDrag=null;clearDragMarks();
+      if(cell)swapCells({d:src.d,s:src.s},{d:+cell.dataset.d,s:cell.dataset.s});
+    });
+    c.addEventListener('touchcancel',()=>{clearTimeout(touchTimer);touchDrag=null;clearDragMarks()});
+  });
+}
+
+/* ---------- regenerar una sola casilla ---------- */
+function regenCell(d,slot){
+  if(!state.platos.length){toast('La biblioteca está vacía');return}
+  const dates=weekDates(), avoidLast=lastWeekNames();
+  const kid=state.nino[isoDate(dates[d])]||'';
+  const actual=cellArr(d,slot).map(c=>norm(c.nombre));
+  /* platos ya colocados en el resto de la semana */
+  const used=new Set();
+  for(let j=0;j<7;j++){for(const s in (week.days[j]||{})){
+    if(j===d&&s===slot)continue;
+    cellArr(j,s).forEach(c=>used.add(norm(c.nombre)));
+  }}
+  /* qué le falta a la semana ahora mismo, sin contar esta casilla */
+  function countExcl(cat){
+    let n=0;
+    for(let j=0;j<5;j++){for(const s in (week.days[j]||{})){
+      if(j===d&&s===slot)continue;
+      cellArr(j,s).forEach(c=>{if(eatsP(c)&&dishCats(c).has(cat))n++});
+    }}
+    return n;
+  }
+  const pe=countExcl('pescado'), le=countExcl('legumbre'), ve=countExcl('verdura'), proc=countExcl('procesado');
+  let veDia=false;
+  if(d<5)for(const s in (week.days[d]||{})){if(s===slot)continue;if(cellArr(d,s).some(c=>dishCats(c).has('verdura')))veDia=true}
+
+  let pool;
+  const esPremio=(slot==='cena'&&d===4);
+  const esFinde=(d>=5);
+  if(esFinde){
+    const FT=['finde','domingo','comida-finde','cena-finde'];
+    pool=state.platos.filter(p=>p.etiquetas.some(t=>FT.includes(t)));
+    const bySlot=pool.filter(p=>p.etiquetas.includes(slot)||p.etiquetas.includes(slot+'-finde'));
+    if(bySlot.length)pool=bySlot;
+  }else if(esPremio){
+    pool=state.platos.filter(p=>p.etiquetas.includes('bocata'));
+    if(!pool.length)pool=state.platos.filter(p=>p.etiquetas.includes('cena'));
+  }else{
+    pool=state.platos.filter(p=>p.etiquetas.includes(slot==='sandwich'?'sandwich':slot));
+  }
+  if(!pool.length){toast('No hay platos con la etiqueta «'+(slot==='sandwich'?'sandwich':slot)+'»');return}
+
+  let cands=pool.filter(p=>!used.has(norm(p.nombre))&&!actual.includes(norm(p.nombre)));
+  if(slot==='cena'&&d<5)cands=cands.filter(p=>!overlapsNino(p,kid));
+  if((slot==='comida'||slot==='cena')&&!esPremio&&!esFinde){
+    const conProt=cands.filter(p=>{const c=dishCats(p);return c.has('proteina')||c.has('pescado')||c.has('legumbre')});
+    if(conProt.length)cands=conProt;
+  }
+  if(!cands.length)cands=pool.filter(p=>!actual.includes(norm(p.nombre)));
+  if(!cands.length){toast('No hay más platos disponibles para esta casilla');return}
+
+  let chosen;
+  if(esPremio||esFinde)chosen=cands[Math.floor(Math.random()*cands.length)];
+  else{
+    let best=-1e9;
+    cands.forEach(p=>{
+      const cats=dishCats(p);
+      let s=Math.random();
+      if(pe<2&&cats.has('pescado'))s+=5;
+      if(le<2&&cats.has('legumbre'))s+=5;
+      if(!veDia&&cats.has('verdura'))s+=3;
+      if(ve<10&&cats.has('verdura'))s+=2;
+      if(cats.has('procesado'))s-=(proc>=2?6:2);
+      if(avoidLast.has(norm(p.nombre)))s-=4;
+      if(s>best){best=s;chosen=p}
+    });
+  }
+  if(!week.days[d])week.days[d]={};
+  week.days[d][slot]=[{id:chosen.id,nombre:chosen.nombre,ingredientes:chosen.ingredientes,etiquetas:chosen.etiquetas}];
+  openCells.delete(d+'-'+slot);
+  dirty=true;renderTables();
+  toast('↻ '+chosen.nombre);
+}
+
 function renderBalance(){
   const pe=countCat('pescado'),le=countCat('legumbre'),ve=countCat('verdura');
   $('#balance').innerHTML=
@@ -1087,6 +1263,7 @@ function openPop(cell,e){
   pop.innerHTML='<div class="poplabel">'+DIAS[currentCell.d]+' · '+slotLabel(currentCell.s)+'</div>'+
     '<button id="ppAnadir">➕ Añadir</button>'+
     '<button id="ppCambiar">🔄 Cambiar</button>'+
+    (arr.length?'<button id="ppRegen">↻ Generar otro</button>':'')+
     (arr.length?'<button id="ppComensal">👤 Comensal</button>':'')+
     (arr.length?'<button id="ppEliminar" class="danger">✖ Eliminar</button>':'')+
     '<button id="ppEspecial">✏️ Especial</button>';
@@ -1096,6 +1273,7 @@ function openPop(cell,e){
   pop.style.top=(r.bottom+window.scrollY+4)+'px';
   $('#ppAnadir').addEventListener('click',()=>{closePop();pickAction='append';openPick()});
   $('#ppCambiar').addEventListener('click',()=>{closePop();pickAction='replace';openPick()});
+  const rg=$('#ppRegen');if(rg)rg.addEventListener('click',()=>{const cc={...currentCell};closePop();regenCell(cc.d,cc.s)});
   $('#ppEspecial').addEventListener('click',()=>{closePop();openMod()});
   const cm=$('#ppComensal');if(cm)cm.addEventListener('click',e2=>{e2.stopPropagation();showComensal(cell)});
   const v=$('#ppEliminar');if(v)v.addEventListener('click',()=>{if(!week.days[currentCell.d])week.days[currentCell.d]={};week.days[currentCell.d][currentCell.s]=[];dirty=true;closePop();renderTables()});
@@ -1130,9 +1308,11 @@ function closePop(){pop.style.display='none'}
 document.addEventListener('click',e=>{if(!pop.contains(e.target))closePop()});
 
 /* ---------- modal elegir ---------- */
+let pickTagFilter=null;
 function openPick(){
   $('#pickTitle').textContent=(pickAction==='append'?'Añadir a':'Cambiar')+' · '+DIAS[currentCell.d]+' '+slotLabel(currentCell.s);
   $('#pickSearch').value='';
+  pickTagFilter=null;
   renderPickList();
   $('#ovPick').classList.add('open');
   $('#pickSearch').focus();
@@ -1140,8 +1320,15 @@ function openPick(){
 function renderPickList(){
   const q=norm($('#pickSearch').value);
   const tag=currentCell.s==='sandwich'?'sandwich':currentCell.s;
-  let list=state.platos.filter(p=>p.etiquetas.includes(tag));
-  let rest=state.platos.filter(p=>!p.etiquetas.includes(tag));
+  /* chips de etiquetas: la de la casilla primero y luego el resto, alfabéticas */
+  $('#pickFilters').innerHTML=sortedTags().map(t=>'<button class="tp'+(pickTagFilter===t?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
+  $('#pickFilters').querySelectorAll('.tp').forEach(b=>b.addEventListener('click',()=>{
+    pickTagFilter=pickTagFilter===b.dataset.t?null:b.dataset.t;
+    renderPickList();
+  }));
+  const base=pickTagFilter?state.platos.filter(p=>p.etiquetas.includes(pickTagFilter)):state.platos;
+  let list=base.filter(p=>p.etiquetas.includes(tag));
+  let rest=base.filter(p=>!p.etiquetas.includes(tag));
   const match=p=>!q||norm(p.nombre+' '+p.ingredientes).includes(q);
   list=list.filter(match).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
   rest=rest.filter(match).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
@@ -1149,6 +1336,7 @@ function renderPickList(){
   let html='<div class="pickitem" id="pickRegNuevo" style="background:var(--olive-tint);font-weight:700">➕ Registrar plato nuevo</div>';
   html+=list.map(item).join('');
   if(rest.length)html+='<div class="poplabel" style="padding:10px 14px 4px">Otras categorías</div>'+rest.map(item).join('');
+  if(!list.length&&!rest.length)html+='<div class="pickempty">Ningún plato con «'+esc(pickTagFilter||'')+'»'+(q?' y ese texto':'')+'.</div>';
   $('#pickList').innerHTML=html;
   $('#pickRegNuevo').addEventListener('click',()=>{$('#ovPick').classList.remove('open');openNew()});
   $('#pickList').querySelectorAll('.pickitem[data-id]').forEach(el=>el.addEventListener('click',()=>{
